@@ -4,10 +4,6 @@ using UnityEngine.Events;
 
 public class StartIfIsServerEvent : ActionScript
 {
-    public float delay;
-
-    public bool loop = false;
-
     public UnityEvent onStart;
 
     protected override void Run()
