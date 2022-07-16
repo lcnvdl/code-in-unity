@@ -4,7 +4,7 @@ namespace CodeInUnity.Core.MonoBehaviourChildren
 {
     public class SingletonBehaviour<T>: MonoBehaviour where T: UnityEngine.Object
     {
-        protected virtual bool AutoInstantiate { get { return false; } }
+        protected static bool autoInstantiate = true;
 
         private static T instance = null;
 
@@ -16,7 +16,7 @@ namespace CodeInUnity.Core.MonoBehaviourChildren
                 {
                     instance = FindObjectOfType<T>();
 
-                    if (instance == null && AutoInstantiate)
+                    if (instance == null && autoInstantiate)
                     {
                         var go = new GameObject(typeof(T).Name);
                         instance = go.AddComponent(typeof(T)) as T;

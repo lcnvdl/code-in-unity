@@ -10,7 +10,7 @@ public class CallIfTransformIsDestroyed : MonoBehaviour
 
     void Update () 
     {
-        if (other == null)
+        if (target == null)
         {
             onDestroy.Invoke();
         }
