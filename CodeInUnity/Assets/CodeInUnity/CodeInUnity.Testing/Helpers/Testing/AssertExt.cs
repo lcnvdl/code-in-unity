@@ -70,6 +70,16 @@ namespace CodeInUnity.Testing.Helpers.Testing
         {
             Test(a, b, (va, vb, name) => AssertEquality(va, vb, name, false));
         }
+        
+        public static void AreDeepEquals(object a, object b)
+        {
+            Assert.AreEqual(a == null ? null : UnityEngine.JsonUtility.ToJson(a), b == null ? null : UnityEngine.JsonUtility.ToJson(b));
+        }
+
+        public static void AreNotDeepEquals(object a, object b)
+        {
+            Assert.AreNotEqual(a == null ? null : UnityEngine.JsonUtility.ToJson(a), b == null ? null : UnityEngine.JsonUtility.ToJson(b));
+        }
 
         public static void AnyDifferentValues(object a, object b)
         {
@@ -218,6 +228,10 @@ namespace CodeInUnity.Testing.Helpers.Testing
                 }
 
                 return;
+            }
+            else
+            {
+                Assert.AreEqual(UnityEngine.JsonUtility.ToJson(movement), UnityEngine.JsonUtility.ToJson(clone));
             }
             //else if (a is UG_ISerializable && b is UG_ISerializable)
             //{
