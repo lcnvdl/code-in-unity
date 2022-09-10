@@ -231,7 +231,7 @@ namespace CodeInUnity.Testing.Helpers.Testing
             }
             else
             {
-                Assert.AreEqual(UnityEngine.JsonUtility.ToJson(movement), UnityEngine.JsonUtility.ToJson(clone));
+                Assert.AreEqual(UnityEngine.JsonUtility.ToJson(a), UnityEngine.JsonUtility.ToJson(b));
             }
             //else if (a is UG_ISerializable && b is UG_ISerializable)
             //{
