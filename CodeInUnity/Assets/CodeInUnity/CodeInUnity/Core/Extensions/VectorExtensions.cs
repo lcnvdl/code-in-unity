@@ -18,5 +18,15 @@ namespace CodeInUnity.Extensions
         {
             return new Vector3(v.x, v.y, z);
         }
+        
+        public static Vector3 Add(this Vector3 a, Vector3 b)
+        {
+            return new Vector3(a.x + b.x, a.y + b.y, a.z + b.z);
+        }
+
+        public static Vector3 Mult(this Vector3 a, Vector3 b)
+        {
+            return new Vector3(a.x * b.x, a.y * b.y, a.z * b.z);
+        }
     }
 }

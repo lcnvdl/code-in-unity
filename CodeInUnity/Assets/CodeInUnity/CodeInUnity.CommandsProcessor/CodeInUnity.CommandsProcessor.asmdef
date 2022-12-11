@@ -1,9 +1,9 @@
 {
-    "name": "CodeInUnity.Editor",
-    "references": [],
-    "includePlatforms": [
-        "Editor"
+    "name": "CodeInUnity.CommandsProcessor",
+    "references": [
+        "GUID:0130a9f3bb8b2214e93eb607378a3471"
     ],
+    "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,

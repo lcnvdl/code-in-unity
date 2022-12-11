@@ -1,8 +1,4 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CodeInUnity.Core.Utils
 {
@@ -16,6 +12,16 @@ namespace CodeInUnity.Core.Utils
             }
 
             return number + Fibbonacci(number - 1);
+        }
+
+        public static float Media(params float[] numbers)
+        {
+            if (numbers == null || numbers.Length == 0)
+            {
+                return 0;
+            }
+
+            return numbers.Sum() / numbers.Length;
         }
     }
 }
