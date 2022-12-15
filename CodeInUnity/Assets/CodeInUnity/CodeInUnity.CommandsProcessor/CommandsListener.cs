@@ -11,6 +11,7 @@ public class CommandsListener : MonoBehaviour
 
     public bool isPaused = false;
 
+    [SerializeReference]
     public List<BaseCommand> commands = new List<BaseCommand>();
 
     public bool IsWorking => this.commands.Any(m => m.IsRunning);

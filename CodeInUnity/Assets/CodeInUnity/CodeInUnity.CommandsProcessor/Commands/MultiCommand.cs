@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
+using CodeInUnity.Command;
 using CodeInUnity.Core.Utils;
 using UnityEngine;
-using CodeInUnity.Command;
 
 namespace CodeInUnity.Commands
 {
@@ -10,6 +10,7 @@ namespace CodeInUnity.Commands
     public class MultiCommand : BaseCommand
     {
         [SerializeField]
+        [SerializeReference]
         [HideInInspector]
         private BaseCommand[] commands;
 
