@@ -15,15 +15,15 @@ namespace CodeInUnity.Command
             {
                 case "DelayCommand":
                 case "delay":
-                    cmd = UnityEngine.JsonUtility.FromJson<DelayCommand>(data.data);
+                    cmd = JsonUtility.FromJson<DelayCommand>(data.data);
                     break;
                 case "MoveToCommand":
                 case "moveTo":
-                    cmd = UnityEngine.JsonUtility.FromJson<MoveToCommand>(data.data);
+                    cmd = JsonUtility.FromJson<MoveToCommand>(data.data);
                     break;
                 case "RotateToCommand":
                 case "rotateTo":
-                    cmd = UnityEngine.JsonUtility.FromJson<RotateToCommand>(data.data);
+                    cmd = JsonUtility.FromJson<RotateToCommand>(data.data);
                     break;
                 default:
                     throw new InvalidOperationException("Unknown command: " + data.type);
@@ -44,7 +44,21 @@ namespace CodeInUnity.Command
 
             if (data.targetInstanceId > 0)
             {
-                cmd.manualTarget = (GameObject)GameObjectUtils.FindObjectFromInstanceID(data.targetInstanceId);
+                var objectFromId = GameObjectUtils.FindObjectFromInstanceID(data.targetInstanceId);
+
+                cmd.manualTarget = objectFromId as GameObject;
+
+                if (cmd.manualTarget == null)
+                {
+                    if (objectFromId is Transform)
+                    {
+                        cmd.manualTarget = ((Transform)objectFromId).gameObject;
+                    }
+                    else if (objectFromId is MonoBehaviour)
+                    {
+                        cmd.manualTarget = ((MonoBehaviour)objectFromId).gameObject;
+                    }
+                }
             }
         }
     }

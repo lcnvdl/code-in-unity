@@ -58,6 +58,12 @@ namespace CodeInUnity.Command
 
         [SerializeField]
         [HideInInspector]
+        private GameObject initialGameObject = null;
+
+        public GameObject InitialGameObject => this.initialGameObject;
+
+        [SerializeField]
+        [HideInInspector]
         private GameObject lastGameObject;
 
         public GameObject LastGameObject
@@ -74,6 +80,7 @@ namespace CodeInUnity.Command
         public virtual void Start(GameObject gameObject)
         {
             this.status = CommandStatus.Running;
+            this.initialGameObject = gameObject;
             this.LastGameObject = gameObject;
             //Debug.Log(this.GetType().Name + " started");
         }
@@ -92,8 +99,9 @@ namespace CodeInUnity.Command
 
         public void Step(float dt, GameObject gameObject)
         {
-            this.LastGameObject = this.manualTarget ?? gameObject;
-            this.Work(dt, this.manualTarget ?? gameObject);
+            GameObject target = this.manualTarget == null ? gameObject : this.manualTarget;
+            this.LastGameObject = target;
+            this.Work(dt, target);
             totalTime += dt;
         }
 
