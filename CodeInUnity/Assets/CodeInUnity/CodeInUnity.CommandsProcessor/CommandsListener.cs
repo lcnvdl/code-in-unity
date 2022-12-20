@@ -54,8 +54,9 @@ public class CommandsListener : MonoBehaviour
         commands.Add(cmd);
     }
 
-    public void CancelCommands()
+    public void CancelCommands(string reason)
     {
+        commands.FindAll(m => m.IsFinished).ForEach(m => m.Cancel(reason));
         commands.Clear();
     }
 

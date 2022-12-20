@@ -15,8 +15,14 @@ namespace CodeInUnity.Command
     [Serializable]
     public abstract class BaseCommand
     {
+        [HideInInspector]
+        public string uuid;
+
+        public string internalId;
+
         public bool isAsync = false;
 
+        [HideInInspector]
         public int internalOrder = 0;
 
         public int priority = 0;
@@ -48,44 +54,59 @@ namespace CodeInUnity.Command
 
         public float TotalTime => this.totalTime;
 
-        public GameObject LastGameObject { get; private set; }
+        public GameObject manualTarget = null;
+
+        [SerializeField]
+        [HideInInspector]
+        private GameObject lastGameObject;
+
+        public GameObject LastGameObject
+        {
+            get => this.lastGameObject;
+            private set => this.lastGameObject = value;
+        }
+
+        public BaseCommand()
+        {
+            uuid = Guid.NewGuid().ToString();
+        }
 
         public virtual void Start(GameObject gameObject)
         {
             this.status = CommandStatus.Running;
             this.LastGameObject = gameObject;
-            Debug.Log(this.GetType().Name + " started");
+            //Debug.Log(this.GetType().Name + " started");
         }
 
         public virtual void Pause()
         {
             this.status = CommandStatus.Paused;
-            Debug.Log(this.GetType().Name + " paused");
+            //Debug.Log(this.GetType().Name + " paused");
         }
 
         public virtual void Unpause()
         {
             this.status = CommandStatus.Running;
-            Debug.Log(this.GetType().Name + " unpaused");
+            //Debug.Log(this.GetType().Name + " unpaused");
         }
 
         public void Step(float dt, GameObject gameObject)
         {
-            this.LastGameObject = gameObject;
-            this.Work(dt, gameObject);
+            this.LastGameObject = this.manualTarget ?? gameObject;
+            this.Work(dt, this.manualTarget ?? gameObject);
             totalTime += dt;
         }
 
-        protected virtual void Cancel(string reason = null)
+        public virtual void Cancel(string reason = null)
         {
             this.status = CommandStatus.Cancelled;
-            Debug.Log(this.GetType().Name + " cancelled " + (reason ?? string.Empty));
+            //Debug.Log(this.GetType().Name + " cancelled " + (reason ?? string.Empty));
         }
 
         protected virtual void Finish()
         {
             this.status = CommandStatus.Finished;
-            Debug.Log(this.GetType().Name + " finished");
+            //Debug.Log(this.GetType().Name + " finished");
         }
 
         protected abstract void Work(float dt, GameObject gameObject);

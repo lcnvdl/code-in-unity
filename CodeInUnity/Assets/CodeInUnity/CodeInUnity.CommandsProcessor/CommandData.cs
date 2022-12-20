@@ -8,5 +8,17 @@ namespace CodeInUnity.Command
         public string type;
 
         public string data;
+
+        public int priority;
+
+        public string internalId;
+
+        public int targetInstanceId;
+    }
+
+    [Serializable]
+    public class CommandDataGroup
+    {
+        public CommandData[] commands;
     }
 }

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CodeInUnity.Core.Utils
+﻿namespace CodeInUnity.Core.Utils
 {
     public static class StringUtils
     {
