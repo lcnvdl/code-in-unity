@@ -23,5 +23,35 @@ namespace CodeInUnity.Core.Utils
 
             return numbers.Sum() / numbers.Length;
         }
+
+        public static float NormalizeAngle180(float angle)
+        {
+            while (angle > 180)
+            {
+                angle -= 360;
+            }
+
+            while (angle < -180)
+            {
+                angle += 360;
+            }
+
+            return angle;
+        }
+
+        public static float NormalizeAngle(float angle)
+        {
+            while (angle > 360)
+            {
+                angle -= 360;
+            }
+
+            while (angle < 0)
+            {
+                angle += 360;
+            }
+
+            return angle;
+        }
     }
 }
