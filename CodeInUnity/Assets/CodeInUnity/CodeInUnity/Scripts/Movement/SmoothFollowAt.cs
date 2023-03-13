@@ -28,10 +28,10 @@ public class SmoothFollowAt : MonoBehaviour
 
     void Update()
     {
-        transform.position = Vector3.MoveTowards(transform.position, target.position + deltaPosition, speed * Time.deltaTime);
-
         var targetRotation = Quaternion.Euler(target.rotation.eulerAngles + deltaRotation);
 
-        transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, angularSpeed * Time.deltaTime);
+        transform.SetPositionAndRotation(
+            Vector3.MoveTowards(transform.position, target.position + deltaPosition, speed * Time.deltaTime),
+            Quaternion.RotateTowards(transform.rotation, targetRotation, angularSpeed * Time.deltaTime));
     }
 }
