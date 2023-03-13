@@ -81,7 +81,7 @@ namespace CodeInUnity.Core.Collections
         {
             this.dictionary.Clear();
 
-            for (int i = 0; i < keys.Count; i++)
+            for (int i = 0; i < keys.Count && i < values.Count; i++)
             {
                 this.dictionary.Add(keys[i], values[i]);
             }
