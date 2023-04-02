@@ -58,6 +58,9 @@ namespace CodeInUnity.Core.Security
     {
         public int locks = 0;
 
+        /// <summary>
+        /// True if doesn't have any lock.
+        /// </summary>
         public bool Value
         {
             get => this.locks <= 0;
@@ -92,6 +95,9 @@ namespace CodeInUnity.Core.Security
     {
         public int locks = 0;
 
+        /// <summary>
+        /// True if it has any lock
+        /// </summary>
         public bool Value
         {
             get => this.locks > 0;

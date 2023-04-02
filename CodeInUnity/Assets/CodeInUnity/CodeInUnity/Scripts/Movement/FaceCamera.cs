@@ -2,10 +2,18 @@
 
 public class FaceCamera : MonoBehaviour
 {
-    public Camera Camera;
+    public Camera cam;
+
+    private void Start()
+    {
+        if (this.cam == null)
+        {
+            this.cam = Camera.main;
+        }
+    }
 
     private void Update()
     {
-        transform.LookAt(Camera.transform, Vector3.up);
+        transform.LookAt(cam.transform, Vector3.up);
     }
 }

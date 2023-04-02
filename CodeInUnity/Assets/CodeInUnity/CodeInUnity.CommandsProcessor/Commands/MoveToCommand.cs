@@ -1,7 +1,7 @@
 ﻿using System;
-using CodeInUnity.Extensions;
 using UnityEngine;
 using CodeInUnity.Command;
+using CodeInUnity.Extensions;
 
 namespace CodeInUnity.Commands
 {

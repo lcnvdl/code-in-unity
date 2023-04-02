@@ -18,7 +18,26 @@ public class CommandsListener : MonoBehaviour
 
     public bool HasCommands => this.commands.Count > 0;
 
-    public bool IsEmpty => this.commands.Count == 0 || this.commands.All(m => m.IsInFinishedStatus);
+    public bool IsEmpty
+    {
+        get
+        {
+            if (this.commands.Count == 0)
+            {
+                return true;
+            }
+
+            for (int i = 0; i < this.commands.Count; i++)
+            {
+                if (!this.commands[i].IsInFinishedStatus)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+    }
 
     private void FixedUpdate()
     {
@@ -50,8 +69,20 @@ public class CommandsListener : MonoBehaviour
 
     public void AddCommand(BaseCommand cmd)
     {
-        cmd.internalOrder = commands.Any() ? (commands.Max(m => m.internalOrder) + 1) : 0;
+        cmd.internalOrder = this.NextInternalOrder();
         commands.Add(cmd);
+    }
+
+    public bool AddUniqueCommand(BaseCommand cmd)
+    {
+        if (this.commands.Any(m => m.internalId.Equals(cmd.internalId)))
+        {
+            return false;
+        }
+
+        this.AddCommand(cmd);
+
+        return true;
     }
 
     public void CancelCommands(string reason)
@@ -62,16 +93,20 @@ public class CommandsListener : MonoBehaviour
 
     private void SortAndClearCommands()
     {
-        if (this.commands.Count == 0)
+        int len = this.commands.Count;
+
+        if (len == 0)
         {
             return;
         }
 
-        commands = commands
-            .Where(m => !m.IsInFinishedStatus)
-            .OrderByDescending(m => m.priority)
-            .ThenBy(m => m.internalOrder)
-            .ToList();
+        //  GC Optimization (0 bytes)
+        this.commands.RemoveAll(m => m.IsInFinishedStatus);
+
+        if (this.commands.Count > 1)
+        {
+            this.commands.SortNA((a, b) => SortCommands(a, b));
+        }
     }
 
     private void HandleSyncCommands(float dt)
@@ -91,13 +126,18 @@ public class CommandsListener : MonoBehaviour
 
     private BaseCommand PickAndEnableNextCommand()
     {
-        var nextSyncCommand = commands.FirstOrDefault(m => !m.isAsync && !m.IsInFinishedStatus);
+        if (commands.Count == 0)
+        {
+            return null;
+        }
+
+        var nextSyncCommand = commands.Find(m => !m.isAsync && !m.IsInFinishedStatus);
 
         if (nextSyncCommand != null)
         {
             if (nextSyncCommand.Status == CommandStatus.NotStarted)
             {
-                commands.FindAll(m => m.IsRunning && !m.isAsync).ForEach(m => m.Pause());
+                this.PauseAllRunningSyncCommands();
 
                 nextSyncCommand.Start(gameObject);
             }
@@ -110,21 +150,68 @@ public class CommandsListener : MonoBehaviour
         return nextSyncCommand;
     }
 
-    private void HandleAsyncCommands(float dt)
+    private void PauseAllRunningSyncCommands()
     {
-        var asyncCommands = commands.Where(m => m.isAsync && !m.IsPaused);
-
-        foreach (var cmd in asyncCommands)
+        foreach (var cmd in commands)
         {
-            if (cmd.Status == CommandStatus.NotStarted)
+            if (cmd.IsRunning && !cmd.isAsync)
             {
-                cmd.Start(gameObject);
-            }
-
-            if (cmd.Status == CommandStatus.Running)
-            {
-                cmd.Step(dt, gameObject);
+                cmd.Pause();
             }
         }
+    }
+
+    private int NextInternalOrder()
+    {
+        if (commands.Count == 0)
+        {
+            return 0;
+        }
+
+        int max = 0;
+
+        foreach (var command in commands)
+        {
+            if (command.internalOrder > max)
+            {
+                max = command.internalOrder;
+            }
+        }
+
+        return max + 1;
+    }
+
+    private void HandleAsyncCommands(float dt)
+    {
+        if (commands.Count == 0)
+        {
+            return;
+        }
+
+        foreach (var cmd in commands)
+        {
+            if (cmd.isAsync && !cmd.IsPaused)
+            {
+                if (cmd.Status == CommandStatus.NotStarted)
+                {
+                    cmd.Start(gameObject);
+                }
+
+                if (cmd.Status == CommandStatus.Running)
+                {
+                    cmd.Step(dt, gameObject);
+                }
+            }
+        }
+    }
+
+    private static int SortCommands(BaseCommand x, BaseCommand y)
+    {
+        if (x.priority != y.priority)
+        {
+            return y.priority - x.priority;
+        }
+
+        return x.internalOrder - y.internalOrder;
     }
 }

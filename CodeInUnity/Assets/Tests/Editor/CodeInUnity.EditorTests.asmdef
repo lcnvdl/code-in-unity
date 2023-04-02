@@ -1,10 +1,13 @@
 {
     "name": "CodeInUnity.EditorTests",
+    "rootNamespace": "",
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
         "CodeInUnity",
-        "CodeInUnity.Editor"
+        "CodeInUnity.Editor",
+        "CodeInUnity.CommandsProcessor",
+        "CodeInUnity.StateMachine"
     ],
     "includePlatforms": [
         "Editor"
@@ -19,5 +22,6 @@
     "defineConstraints": [
         "UNITY_INCLUDE_TESTS"
     ],
-    "versionDefines": []
+    "versionDefines": [],
+    "noEngineReferences": false
 }
