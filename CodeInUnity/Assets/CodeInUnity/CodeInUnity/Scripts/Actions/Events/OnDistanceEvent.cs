@@ -11,8 +11,10 @@ public class OnDistanceEvent : MonoBehaviour
 
     public string tagTest;
 
-    //  Distance
+    //  Distance and center
     public float distance = 400;
+
+    public Transform center;
 
     //  Delay (optimization)
     public float delayBetweenTests = 1f;
@@ -30,6 +32,14 @@ public class OnDistanceEvent : MonoBehaviour
     private List<Transform> objectsInRange = new List<Transform>();
 
     //  Methods
+
+    private void Start()
+    {
+        if (this.center == null)
+        {
+            this.center = transform;
+        }
+    }
 
     private void Update()
     {
@@ -107,7 +117,7 @@ public class OnDistanceEvent : MonoBehaviour
 
     private bool IsInRange(Transform obj)
     {
-        bool isInRange = Vector3.Distance(transform.position, obj.position) <= this.distance;
+        bool isInRange = Vector3.Distance(this.center.position, obj.position) <= this.distance;
         return isInRange;
     }
 }
