@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Rotate : ActionScript
 {
@@ -23,11 +21,7 @@ public class Rotate : ActionScript
     {
         if (isEnabled)
         {
-            (target ?? transform).eulerAngles = new Vector3(
-                transform.eulerAngles.x + xSpeed * Time.deltaTime,
-                transform.eulerAngles.y + ySpeed * Time.deltaTime,
-                transform.eulerAngles.z + zSpeed * Time.deltaTime
-            );
+            (target ?? transform).Rotate(new Vector3(xSpeed, ySpeed, zSpeed) * Time.deltaTime);
         }
     }
 }

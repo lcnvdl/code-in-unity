@@ -4,6 +4,40 @@ namespace System.Linq
 {
     public static class NonAllocLinqExtension
     {
+        public static T FirstOrDefaultNA<T>(this List<T> self)
+        {
+            return self.Count > 0 ? self[0] : default(T);
+        }
+
+        public static T ShiftNA<T>(this List<T> self)
+        {
+            if (self.Count == 0)
+            {
+                return default(T);
+            }
+
+            var instance = self[0];
+            self.RemoveAt(0);
+            return instance;
+        }
+
+        public static T PopNA<T>(this List<T> self)
+        {
+            if (self.Count == 0)
+            {
+                return default(T);
+            }
+
+            var instance = self[self.Count - 1];
+            self.RemoveAt(self.Count - 1);
+            return instance;
+        }
+
+        public static T LastOrDefaultNA<T>(this List<T> self)
+        {
+            return self.Count > 0 ? self[self.Count - 1] : default(T);
+        }
+
         public static bool AnyNA<T>(this List<T> self)
         {
             return self.Count > 0;
