@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 
 namespace UnityEngine
 {
@@ -12,6 +8,13 @@ namespace UnityEngine
         {
 #if UNITY_EDITOR
             Debug.Log(message);
+#endif
+        }
+
+        public static void LogWarning(object message)
+        {
+#if UNITY_EDITOR
+            Debug.LogWarning(message);
 #endif
         }
 
@@ -28,7 +31,7 @@ namespace UnityEngine
         public static void Log(string message, params object[] args)
         {
 #if UNITY_EDITOR
-            Debug.Log(message + " " + string.Join(' ', args));
+            Debug.Log(message + " " + string.Join(" ", args.Select(m => (m ?? "").ToString())));
 #endif
         }
 

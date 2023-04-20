@@ -14,5 +14,9 @@ namespace CodeInUnity.Core.Utils
         public static readonly Vector3Bool True = new Vector3Bool() { x = true, y = true, z = true };
 
         public static readonly Vector3Bool False = new Vector3Bool() { x = false, y = false, z = false };
+
+        public bool IsAllTrue => x && y && z;
+
+        public bool IsAllFalse => !x && !y && !z;
     }
 }

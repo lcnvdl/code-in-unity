@@ -108,7 +108,7 @@ public class SafeFloat
         }
         else
         {
-            return this == obj;
+            return base.Equals(obj);
         }
     }
 

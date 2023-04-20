@@ -29,6 +29,14 @@ public class FollowTarget : MonoBehaviour
 
     private void Update()
     {
-        transform.position = this.target.position + this.offset;
+        if (this.target != null)
+        {
+            transform.position = this.target.position + this.offset;
+        }
+        else
+        {
+            EditorDebug.LogWarning($"FollowTarget: target is null. Disabled in {gameObject.name}.");
+            this.enabled = false;
+        }
     }
 }

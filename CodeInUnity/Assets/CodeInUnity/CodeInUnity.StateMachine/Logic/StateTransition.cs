@@ -35,9 +35,9 @@ namespace CodeInUnity.StateMachine
 
                 var ands = new List<bool>();
 
-                foreach (var qor in parsedQuery.Split("||"))
+                foreach (var qor in parsedQuery.Split(new[] { "||" }, StringSplitOptions.None))
                 {
-                    foreach (var qand in qor.Split("&&"))
+                    foreach (var qand in qor.Split(new[] { "&&" }, StringSplitOptions.None))
                     {
                         for (int i = 0; i < ops.Length; i++)
                         {
