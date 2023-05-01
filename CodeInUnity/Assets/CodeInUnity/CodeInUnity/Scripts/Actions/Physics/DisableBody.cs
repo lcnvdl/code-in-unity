@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using CodeInUnity.Core.Utils;
 using UnityEngine;
 
 public class DisableBody : ActionScript
@@ -8,7 +7,8 @@ public class DisableBody : ActionScript
 
     protected override void Run()
     {
-        foreach (var body in (target ?? transform).GetComponentsInChildren<Rigidbody>())
+        var bodies = ArrayUtils.PickFirstNotNull(target, transform).GetComponentsInChildren<Rigidbody>();
+        foreach (var body in bodies)
         {
             body.isKinematic = true;
             body.detectCollisions = false;

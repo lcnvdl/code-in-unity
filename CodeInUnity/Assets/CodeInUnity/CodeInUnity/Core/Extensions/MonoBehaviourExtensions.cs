@@ -17,7 +17,7 @@ namespace CodeInUnity.Extensions
             return tags.FirstOrDefault(customTag => customTag.tagId.Equals(tag) && (value == null || value.Equals(customTag.additionalValue)));
         }
 
-        public static T LazyGetInstance<T>(this MonoBehaviour self, ref T value, bool lookInChildren = true) where T : class
+        public static T LazyGetInstance<T>(this MonoBehaviour self, ref T value, bool lookInChildren = true) where T : Component
         {
             if (value == null)
             {
@@ -28,6 +28,36 @@ namespace CodeInUnity.Extensions
             }
 
             return value;
+        }
+
+        /// <summary>
+        /// Fix for "unity objects should not use null coalescing".
+        /// </summary>
+        public static T GetComponentRealNull<T>(this GameObject self) where T : Component
+        {
+            T component = self.GetComponent<T>();
+
+            if (component == null)
+            {
+                return null;
+            }
+
+            return component;
+        }
+
+        /// <summary>
+        /// Fix for "unity objects should not use null coalescing".
+        /// </summary>
+        public static T GetComponentOrAddIfMissing<T>(this GameObject self) where T : Component
+        {
+            T component = self.GetComponent<T>();
+
+            if (component == null)
+            {
+                component = self.AddComponent<T>();
+            }
+
+            return component;
         }
     }
 }

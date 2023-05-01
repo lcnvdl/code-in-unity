@@ -32,19 +32,15 @@ namespace CodeInUnity.Scripts.GameObjects
 
         public bool debugLog = true;
 
-        private Dictionary<string, LinkedAttributeData> inputs = new Dictionary<string, LinkedAttributeData>();
+        private readonly Dictionary<string, LinkedAttributeData> inputs = new Dictionary<string, LinkedAttributeData>();
 
-        private Dictionary<string, List<LinkedAttributeData>> outputs = new Dictionary<string, List<LinkedAttributeData>>();
+        private readonly Dictionary<string, List<LinkedAttributeData>> outputs = new Dictionary<string, List<LinkedAttributeData>>();
 
         private void OnEnable()
         {
             this.inputs.Clear();
             this.outputs.Clear();
             this.LoadInputsAndOutputs(transform);
-        }
-
-        private void OnDisable()
-        {
         }
 
         private void LoadInputsAndOutputs(Transform container)

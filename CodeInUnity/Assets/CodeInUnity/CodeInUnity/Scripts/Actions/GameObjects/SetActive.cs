@@ -8,6 +8,7 @@ public class SetActive : ActionScript
 
     protected override void Run()
     {
-        (target ?? gameObject).SetActive(enable);
+        GameObject realTarget = (target == null) ? gameObject : target;
+        realTarget.SetActive(enable);
     }
 }

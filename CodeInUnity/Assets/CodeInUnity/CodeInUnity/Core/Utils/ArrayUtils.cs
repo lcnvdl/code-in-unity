@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace CodeInUnity.Core.Utils
 {
@@ -11,7 +7,7 @@ namespace CodeInUnity.Core.Utils
         public static T Choose<T>(params T[] array)
         {
             if (array.Length == 0)
-                return default(T);
+                return default;
             else if (array.Length == 1)
                 return array[0];
             else
@@ -21,9 +17,24 @@ namespace CodeInUnity.Core.Utils
         public static T Choose<T>(List<T> array)
         {
             if (array.Count == 0)
-                return default(T);
+                return default;
             else
                 return array[UnityEngine.Random.Range(0, array.Count)];
+        }
+
+        public static T PickFirstNotNull<T>(params T[] instances)
+        {
+            int length = instances.Length;
+
+            for (int i = 0; i < length; i++)
+            {
+                if (instances[i] != null)
+                {
+                    return instances[i];
+                }
+            }
+
+            return default;
         }
     }
 }

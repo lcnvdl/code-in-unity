@@ -25,10 +25,6 @@ public class GPUMeshChildrenAutoOptimizeScript : MonoBehaviour
 
     public bool receiveShadows;
 
-    private void Start()
-    {
-    }
-
     public void BeginOptimization(Transform[] instancesToOptimize)
     {
         this.children.ForEach(m => Destroy(m));
@@ -44,8 +40,7 @@ public class GPUMeshChildrenAutoOptimizeScript : MonoBehaviour
                 continue;
             }
 
-            var meshFilter = instance.GetComponent<MeshFilter>();
-            if (meshFilter != null)
+            if (instance.TryGetComponent<MeshFilter>(out var meshFilter))
             {
                 string meshId = meshFilter.GetCustomTag("mesh_id")?.additionalValue ?? string.Empty;
 

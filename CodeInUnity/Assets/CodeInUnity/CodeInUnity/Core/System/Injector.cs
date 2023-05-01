@@ -22,7 +22,7 @@ namespace CodeInUnity.Core.System
 
                     if (globalInstance == null)
                     {
-                        var go = goInstance ?? (new GameObject("InjectionManager_Global"));
+                        var go = (goInstance == null) ? new GameObject("InjectionManager_Global") : goInstance;
                         go.isStatic = true;
                         globalInstance = go.AddComponent<InjectionManagerScript>();
 
@@ -59,7 +59,7 @@ namespace CodeInUnity.Core.System
 
                     if (globalInstance == null)
                     {
-                        var go = goInstance ?? (new GameObject("InjectionManager_SceneInstance"));
+                        var go = (goInstance == null) ? new GameObject("InjectionManager_SceneInstance") : goInstance;
                         go.isStatic = true;
                         sceneInstance = go.AddComponent<InjectionManagerScript>();
                     }

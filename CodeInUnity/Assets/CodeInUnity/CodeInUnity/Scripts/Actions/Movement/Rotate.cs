@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using CodeInUnity.Core.Utils;
+using UnityEngine;
 
 public class Rotate : ActionScript
 {
@@ -21,7 +22,8 @@ public class Rotate : ActionScript
     {
         if (isEnabled)
         {
-            (target ?? transform).Rotate(new Vector3(xSpeed, ySpeed, zSpeed) * Time.deltaTime);
+            var realTarget = ArrayUtils.PickFirstNotNull(target, transform);
+            realTarget.Rotate(new Vector3(xSpeed, ySpeed, zSpeed) * Time.deltaTime);
         }
     }
 }

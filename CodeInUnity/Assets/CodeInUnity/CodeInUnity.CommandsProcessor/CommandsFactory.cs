@@ -50,13 +50,9 @@ namespace CodeInUnity.Command
 
                 if (cmd.manualTarget == null)
                 {
-                    if (objectFromId is Transform)
+                    if (objectFromId is Component c)
                     {
-                        cmd.manualTarget = ((Transform)objectFromId).gameObject;
-                    }
-                    else if (objectFromId is MonoBehaviour)
-                    {
-                        cmd.manualTarget = ((MonoBehaviour)objectFromId).gameObject;
+                        cmd.manualTarget = c.gameObject;
                     }
                 }
             }

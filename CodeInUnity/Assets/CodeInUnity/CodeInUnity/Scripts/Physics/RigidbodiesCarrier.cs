@@ -6,6 +6,8 @@ public class RigidbodiesCarrier : MonoBehaviour
 {
     public bool useTriggerAsSensor = false;
 
+    public Rigidbody myRigidbody;
+
     public List<Rigidbody> rigidbodies = new List<Rigidbody>();
 
     [SerializeField]
@@ -23,10 +25,6 @@ public class RigidbodiesCarrier : MonoBehaviour
     [SerializeField]
     [HideInInspector]
     private Transform myTransform;
-
-    [SerializeField]
-    [HideInInspector]
-    public Rigidbody myRigidbody;
 
     void Start()
     {

@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using CodeInUnity.Core.Utils;
 using UnityEngine;
 
 public class Move : ActionScript
@@ -21,7 +20,8 @@ public class Move : ActionScript
     {
         if (isEnabled)
         {
-            (target ?? transform).position += speed * Time.deltaTime;
+            var realTarget = ArrayUtils.PickFirstNotNull(target, transform);
+            realTarget.position += speed * Time.deltaTime;
         }
     }
 }
