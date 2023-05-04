@@ -70,12 +70,12 @@ public class CommandsListener : MonoBehaviour
     public void AddCommand(BaseCommand cmd)
     {
         cmd.internalOrder = this.NextInternalOrder();
-        commands.Add(cmd);
+        this.commands.Add(cmd);
     }
 
     public bool AddUniqueCommand(BaseCommand cmd)
     {
-        if (this.commands.Any(m => m.internalId.Equals(cmd.internalId)))
+        if (this.commands.Any(m => m.internalId == cmd.internalId))
         {
             return false;
         }
