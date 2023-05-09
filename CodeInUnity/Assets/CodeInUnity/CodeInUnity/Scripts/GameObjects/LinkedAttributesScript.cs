@@ -83,7 +83,7 @@ namespace CodeInUnity.Scripts.GameObjects
                 var inputType = field.GetCustomAttribute<InputAttribute>();
                 if (inputType != null)
                 {
-                    inputs[field.Name] = new LinkedAttributeData(component, field);
+                    inputs[string.IsNullOrEmpty(inputType.name) ? field.Name : inputType.name] = new LinkedAttributeData(component, field);
                 }
                 else
                 {
