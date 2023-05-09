@@ -27,7 +27,7 @@ namespace CodeInUnity.Core.Utils
             return (UnityEngine.Object)FindObjectFromInstanceIDMethod.Invoke(null, new object[] { iid });
         }
 
-        public static T GetCloser<T>(Vector3 pos, List<T> objects, float minDistance) where T : MonoBehaviour
+        public static T GetCloser<T>(Vector3 pos, List<T> objects, float minDistance) where T : Component
         {
             if (objects == null || objects.Count == 0)
                 return null;
