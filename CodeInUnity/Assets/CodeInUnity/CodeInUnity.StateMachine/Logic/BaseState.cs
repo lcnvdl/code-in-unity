@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace CodeInUnity.StateMachine
 {
@@ -36,6 +35,23 @@ namespace CodeInUnity.StateMachine
 
         public virtual void BeforeUpdateState(StatesManagerBase manager, float deltaTime)
         {
+            this.RunTransitions(manager);
+        }
+
+        public virtual void UpdateState(StatesManagerBase manager, float deltaTime)
+        {
+        }
+
+        /// <summary>
+        /// Para resetear el State antes de entrar al mismo.
+        /// </summary>
+        internal void ResetState()
+        {
+            isTaskFinished = false;
+        }
+
+        private void RunTransitions(StatesManagerBase manager)
+        {
             if (this.transitions != null && this.transitions.Length > 0)
             {
                 for (int i = 0; i < transitions.Length; i++)
@@ -47,7 +63,7 @@ namespace CodeInUnity.StateMachine
                     }
                     else if (transitions[i].interruptState || this.isTaskFinished)
                     {
-                        bool result = transitions[i].Test(manager.variables);
+                        bool result = transitions[i].Test(manager.variables, manager.Triggers);
                         if (result)
                         {
                             var newState = manager.StatesRepository?.GetState(transitions[i].toState);
@@ -59,10 +75,6 @@ namespace CodeInUnity.StateMachine
                     }
                 }
             }
-        }
-
-        public virtual void UpdateState(StatesManagerBase manager, float deltaTime)
-        {
         }
     }
 }

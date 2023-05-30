@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using CodeInUnity.StateMachine;
 using UnityEngine;
@@ -20,6 +19,17 @@ public abstract class StatesRepositoryBaseScript : MonoBehaviour, IStatesReposit
     {
         var state = this.baseStates.Find(m => !string.IsNullOrEmpty(m.identifier) && m.identifier.Equals(id, StringComparison.InvariantCultureIgnoreCase));
         return state;
+    }
+
+    public T GetState<T>() where T : BaseState
+    {
+        T state = this.baseStates.Find(m => !string.IsNullOrEmpty(m.identifier) && m is T) as T;
+        return state;
+    }
+
+    public virtual AnyState GetRootState()
+    {
+        return null;
     }
 
     protected abstract List<BaseState> GenerateStates();

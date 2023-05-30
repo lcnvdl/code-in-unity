@@ -18,20 +18,25 @@ namespace CodeInUnity.StateMachine
 
         public bool IsEmpty => string.IsNullOrEmpty(query);
 
-        public bool Test(SerializableDictionary<string, float> variables)
+        public bool Test(SerializableDictionary<string, float> variables, List<string> triggers)
         {
             string parsedQuery = this.query;
 
             if (!string.IsNullOrEmpty(parsedQuery))
             {
-                parsedQuery = parsedQuery.Replace("\n", string.Empty);
+                foreach (string trigger in triggers)
+                {
+                    parsedQuery = parsedQuery.Replace(trigger, "1");
+                }
 
                 foreach (var kv in variables)
                 {
                     parsedQuery = parsedQuery.Replace(kv.Key, kv.Value.ToString());
-                    parsedQuery = parsedQuery.Replace("true", "1");
-                    parsedQuery = parsedQuery.Replace("false", "0");
                 }
+
+                parsedQuery = parsedQuery.Replace("\n", string.Empty);
+                parsedQuery = parsedQuery.Replace("true", "1");
+                parsedQuery = parsedQuery.Replace("false", "0");
 
                 var ands = new List<bool>();
 
@@ -45,33 +50,41 @@ namespace CodeInUnity.StateMachine
                             var idx = qand.IndexOf(op);
                             if (idx != -1)
                             {
-                                float left = float.Parse(qand.Remove(idx).Trim(), CultureInfo.InvariantCulture);
-                                float right = float.Parse(qand.Substring(idx + qand.Length).Trim(), CultureInfo.InvariantCulture);
-
                                 bool result;
 
-                                switch (op)
+                                float left;
+
+                                if (!float.TryParse(qand.Remove(idx).Trim(), NumberStyles.Float, CultureInfo.InvariantCulture, out left))
                                 {
-                                    case "==":
-                                        result = left == right;
-                                        break;
-                                    case "!=":
-                                        result = left != right;
-                                        break;
-                                    case "<":
-                                        result = left < right;
-                                        break;
-                                    case ">":
-                                        result = left > right;
-                                        break;
-                                    case "<=":
-                                        result = left <= right;
-                                        break;
-                                    case ">=":
-                                        result = left >= right;
-                                        break;
-                                    default:
-                                        throw new InvalidOperationException($"Invalid condition operator: {op}");
+                                    result = false;
+                                }
+                                else
+                                {
+                                    float right = float.Parse(qand.Substring(idx + op.Length).Trim(), CultureInfo.InvariantCulture);
+
+                                    switch (op)
+                                    {
+                                        case "==":
+                                            result = left == right;
+                                            break;
+                                        case "!=":
+                                            result = left != right;
+                                            break;
+                                        case "<":
+                                            result = left < right;
+                                            break;
+                                        case ">":
+                                            result = left > right;
+                                            break;
+                                        case "<=":
+                                            result = left <= right;
+                                            break;
+                                        case ">=":
+                                            result = left >= right;
+                                            break;
+                                        default:
+                                            throw new InvalidOperationException($"Invalid condition operator: {op}");
+                                    }
                                 }
 
                                 ands.Add(result);

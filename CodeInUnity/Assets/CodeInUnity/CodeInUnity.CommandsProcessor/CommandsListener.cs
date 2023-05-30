@@ -75,7 +75,7 @@ public class CommandsListener : MonoBehaviour
 
     public bool AddUniqueCommand(BaseCommand cmd)
     {
-        if (this.commands.Any(m => m.internalId == cmd.internalId))
+        if (this.HasCommand(cmd.internalId))
         {
             return false;
         }
@@ -83,6 +83,31 @@ public class CommandsListener : MonoBehaviour
         this.AddCommand(cmd);
 
         return true;
+    }
+
+    public T GetCommand<T>() where T : BaseCommand
+    {
+        return (T)this.commands.Find(m => m is T);
+    }
+
+    public BaseCommand GetCommand(string id)
+    {
+        return this.commands.Find(m => m.internalId == id);
+    }
+
+    public void CancelCommand(string id, string reason = null)
+    {
+        this.commands.Find(m => m.internalId == id)?.Cancel(reason);
+    }
+
+    public T GetCommand<T>(string id) where T : BaseCommand
+    {
+        return (T)this.commands.Find(m => m.internalId == id);
+    }
+
+    public bool HasCommand(string id)
+    {
+        return this.commands.Any(m => m.internalId == id);
     }
 
     public void CancelCommands(string reason)

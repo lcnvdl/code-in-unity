@@ -25,7 +25,12 @@ namespace CodeInUnity.Command
         [HideInInspector]
         public int internalOrder = 0;
 
+        /// <summary>
+        /// Less means more priority.
+        /// </summary>
         public int priority = 0;
+
+        public float timeout = 0;
 
         [SerializeField]
         [HideInInspector]
@@ -103,18 +108,29 @@ namespace CodeInUnity.Command
             this.LastGameObject = target;
             this.Work(dt, target);
             totalTime += dt;
+
+            if (this.timeout > 0 && this.IsRunning && this.totalTime > this.timeout)
+            {
+                this.Cancel("Timeout");
+            }
         }
 
         public virtual void Cancel(string reason = null)
         {
             this.status = CommandStatus.Cancelled;
             //Debug.Log(this.GetType().Name + " cancelled " + (reason ?? string.Empty));
+            this.OnCancelOrFinish();
         }
 
         protected virtual void Finish()
         {
             this.status = CommandStatus.Finished;
             //Debug.Log(this.GetType().Name + " finished");
+            this.OnCancelOrFinish();
+        }
+
+        protected virtual void OnCancelOrFinish()
+        {
         }
 
         protected abstract void Work(float dt, GameObject gameObject);

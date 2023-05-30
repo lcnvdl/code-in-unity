@@ -1,4 +1,5 @@
 using CodeInUnity.StateMachine;
+using CodeInUnity.StateMachine.Interfaces;
 using UnityEngine;
 
 public class StateMachineScript : MonoBehaviour
@@ -27,8 +28,23 @@ public class StateMachineScript : MonoBehaviour
         machine.Update(Time.deltaTime);
     }
 
+    public void SetTrigger(string name)
+    {
+        this.machine.Trigger(name);
+    }
+
+    public void SetValue(string name, float value)
+    {
+        this.machine.variables[name] = value;
+    }
+
     protected virtual StatesManagerBase GenerateNewMachine()
     {
+        if (this.TryGetComponent(out IStatesManagerFactory states))
+        {
+            return states.CreateNewStatesManager();
+        }
+
         var machine = new StatesManagerBase();
         return machine;
     }

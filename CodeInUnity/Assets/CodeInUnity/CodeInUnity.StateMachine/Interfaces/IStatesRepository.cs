@@ -1,9 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
 using CodeInUnity.StateMachine;
-using UnityEngine;
 
 public interface IStatesRepository
 {
+    AnyState GetRootState();
+
     BaseState GetState(string id);
+}
+
+public interface IWriteableStatesRepository
+{
+    void OverrideState(BaseState state);
 }
