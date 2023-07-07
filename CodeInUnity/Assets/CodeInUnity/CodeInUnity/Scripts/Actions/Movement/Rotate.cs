@@ -23,7 +23,7 @@ public class Rotate : ActionScript
         if (isEnabled)
         {
             var realTarget = ArrayUtils.PickFirstNotNull(target, transform);
-            realTarget.Rotate(new Vector3(xSpeed, ySpeed, zSpeed) * Time.deltaTime);
+            realTarget.rotation = Quaternion.Euler(realTarget.rotation.eulerAngles + new Vector3(xSpeed, ySpeed, zSpeed) * Time.deltaTime);
         }
     }
 }
