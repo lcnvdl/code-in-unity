@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using CodeInUnity.Scripts.Sounds;
 using UnityEngine;
-using UnityEngine.Audio;
 
 public class AudioManagerScript : MonoBehaviour
 {
@@ -22,6 +21,7 @@ public class AudioManagerScript : MonoBehaviour
             s.source.pitch = s.basePitch;
             s.source.loop = s.loop;
             s.source.spatialBlend = s.spatialBlend;
+            s.source.panStereo = s.pan;
             s.source.playOnAwake = false;
         }
     }
