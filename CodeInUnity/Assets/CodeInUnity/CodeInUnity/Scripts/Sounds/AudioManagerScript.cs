@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using CodeInUnity.Scripts.Sounds;
 using UnityEngine;
@@ -31,6 +32,18 @@ public class AudioManagerScript : MonoBehaviour
         Play(GetSound(name));
     }
 
+    public void PlayDelayed(string name, float delay)
+    {
+        StartCoroutine(PlayDelayedCoroutine(name, delay));
+    }
+
+    private IEnumerator PlayDelayedCoroutine(string name, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        Play(name);
+    }
+
     public AudioData PlayAndGet(string name)
     {
         var sound = GetSound(name);
@@ -42,6 +55,11 @@ public class AudioManagerScript : MonoBehaviour
 
     public void Play(AudioData sound)
     {
+        if (sound == null)
+        {
+            return;
+        }
+
         if (sound.randomizePitch)
         {
             sound.source.pitch = sound.basePitch * UnityEngine.Random.Range(sound.randomPitchRange.x, sound.randomPitchRange.y);
@@ -67,7 +85,16 @@ public class AudioManagerScript : MonoBehaviour
 
     public AudioData GetSound(string name)
     {
-        var sound = sounds.Find(m => m.name == name);
-        return sound;
+        foreach (AudioData sound in sounds)
+        {
+            if (sound.name == name)
+            {
+                return sound;
+            }
+        }
+
+        Debug.LogWarning("Sound " + name + " not found");
+
+        return null;
     }
 }
