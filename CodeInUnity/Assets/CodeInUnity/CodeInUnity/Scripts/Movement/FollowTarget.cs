@@ -2,11 +2,9 @@
 
 public class FollowTarget : MonoBehaviour
 {
-    [SerializeField]
-    private Transform target;
+    public Transform target;
 
-    [SerializeField]
-    private Vector3 offset;
+    public Vector3 offset;
 
     [SerializeField]
     private bool calculateInitialOffset;
