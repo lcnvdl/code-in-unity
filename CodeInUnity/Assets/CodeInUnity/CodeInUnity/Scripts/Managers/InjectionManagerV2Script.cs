@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using CodeInUnity.Core.System;
 using UnityEngine;
@@ -9,6 +10,8 @@ public class InjectionManagerV2Script : MonoBehaviour, IInjectorV2Instance
   private Dictionary<string, object> objects = new Dictionary<string, object>();
 
   private static IInjectorV2Instance instance;
+
+  public static IInjectorV2Instance RawInstance => instance;
 
   public static IInjectorV2Instance Instance
   {
@@ -38,11 +41,21 @@ public class InjectionManagerV2Script : MonoBehaviour, IInjectorV2Instance
     }
   }
 
+  public void BindMany(object instance, Type[] types)
+  {
+    objects[instance.GetType().FullName] = instance;
+
+    for (int i = 0; i < types.Length; i++)
+    {
+      objects[types[i].FullName] = instance;
+    }
+  }
+
   public void Bind<T>(T instance)
   {
     objects[instance.GetType().FullName] = instance;
     objects[typeof(T).FullName] = instance;
-    }
+  }
 
   public T GetAny<T>()
   {
@@ -75,6 +88,8 @@ public class InjectionManagerV2Script : MonoBehaviour, IInjectorV2Instance
     return (T)val;
   }
 
+  public T GetAny<T>(ref T value) => LazyInitializeAny<T>(ref value);
+
   public T LazyInitializeAny<T>(ref T value)
   {
     if (value == null)
@@ -83,6 +98,11 @@ public class InjectionManagerV2Script : MonoBehaviour, IInjectorV2Instance
     }
 
     return value;
+  }
+
+  public T GetScript<T>(ref T value) where T : MonoBehaviour
+  {
+    return LazyInitializeScript<T>(ref value);
   }
 
   public T LazyInitializeScript<T>(ref T value) where T : MonoBehaviour
