@@ -41,7 +41,7 @@ namespace CodeInUnity.StateMachine
 
         public List<string> Triggers => this.triggers;
 
-        public IStatesRepository StatesRepository
+        public virtual IStatesRepository StatesRepository
         {
             get
             {
@@ -75,7 +75,7 @@ namespace CodeInUnity.StateMachine
             this.rootState = this.StatesRepository?.GetRootState();
         }
 
-        public void Update(float deltaTime)
+        public virtual void Update(float deltaTime)
         {
             if (lastState != currentState)
             {
