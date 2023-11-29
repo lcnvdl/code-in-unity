@@ -1,6 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class FaderScript : MonoBehaviour
@@ -20,9 +19,17 @@ public class FaderScript : MonoBehaviour
     }
   }
 
+  public UnityEvent onBeginTransition;
+
+  public UnityEvent onFinishInitialDelay;
+
+  public UnityEvent onFinishTransition;
+
   public bool onlyFadeIn = false;
 
   public float duration = 1f;
+
+  public float initialDelay = 0f;
 
   public float hodl = 0f;
 
@@ -36,6 +43,10 @@ public class FaderScript : MonoBehaviour
   [SerializeField]
   [HideInInspector]
   private float currentAlpha = 0f;
+
+  [SerializeField]
+  [HideInInspector]
+  private float currentDelay = 0f;
 
   [SerializeField]
   [HideInInspector]
@@ -54,11 +65,27 @@ public class FaderScript : MonoBehaviour
 
     currentHodl = 0f;
 
+    currentDelay = initialDelay;
+
+    this.onBeginTransition?.Invoke();
+
     UpdateColor();
   }
 
   private void Update()
   {
+    if (currentDelay > 0)
+    {
+      currentDelay -= Time.deltaTime;
+
+      if (currentDelay <= 0)
+      {
+        this.onFinishInitialDelay?.Invoke();
+      }
+
+      return;
+    }
+
     if (onlyFadeIn)
     {
       currentAlpha = Mathf.Clamp01(currentAlpha - Time.deltaTime / DurationPerFace);
@@ -77,6 +104,8 @@ public class FaderScript : MonoBehaviour
     {
       if (currentAlpha <= 0)
       {
+        this.onFinishTransition?.Invoke();
+
         gameObject.SetActive(false);
       }
     }
