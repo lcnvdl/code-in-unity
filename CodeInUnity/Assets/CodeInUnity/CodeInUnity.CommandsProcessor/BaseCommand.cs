@@ -79,7 +79,12 @@ namespace CodeInUnity.Command
 
         public BaseCommand()
         {
-            uuid = Guid.NewGuid().ToString();
+            this.uuid = Guid.NewGuid().ToString();
+        }
+
+        public BaseCommand(string uuid)
+        {
+            this.uuid = uuid;
         }
 
         public virtual void Start(GameObject gameObject)

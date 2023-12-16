@@ -44,6 +44,13 @@ namespace CodeInUnity.Commands
             initialPoint.Mult(new Vector3(1, ignoreYDelta ? 0 : 1, 1)),
             targetPoint.Mult(new Vector3(1, ignoreYDelta ? 0 : 1, 1)));
 
+        public MoveToCommand()
+        {
+        }
+
+        public MoveToCommand(string uuid) : base(uuid)
+        {
+        }
 
         public override void Start(GameObject unparsedGameObject)
         {

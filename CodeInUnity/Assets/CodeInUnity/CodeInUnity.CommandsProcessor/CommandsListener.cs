@@ -14,7 +14,21 @@ public class CommandsListener : MonoBehaviour
     [SerializeReference]
     public List<BaseCommand> commands = new List<BaseCommand>();
 
-    public bool IsWorking => this.commands.Any(m => m.IsRunning);
+    public bool IsWorking
+    {
+        get
+        {
+            for (int i = 0; i < this.commands.Count; i++)
+            {
+                if (this.commands[i].IsRunning)
+                { 
+                    return true;
+                }
+            }
+
+            return false;
+        }
+    }
 
     public bool HasCommands => this.commands.Count > 0;
 
@@ -107,7 +121,17 @@ public class CommandsListener : MonoBehaviour
 
     public bool HasCommand(string id)
     {
-        return this.commands.Any(m => m.internalId == id);
+        int count = this.commands.Count;
+        
+        for (int i = 0; i < count; i++)
+        {
+            if (this.commands[i].internalId == id)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public void CancelCommands(string reason)
