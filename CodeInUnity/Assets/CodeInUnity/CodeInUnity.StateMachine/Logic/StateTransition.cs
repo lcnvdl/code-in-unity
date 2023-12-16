@@ -30,10 +30,10 @@ namespace CodeInUnity.StateMachine
 
     public bool Test(SerializableDictionary<string, float> variables, List<string> triggers)
     {
-      string parsedQuery = this.query;
-
-      if (!string.IsNullOrEmpty(parsedQuery))
+      if (!string.IsNullOrEmpty(this.query))
       {
+        string parsedQuery = this.query;
+
         foreach (string trigger in triggers)
         {
           parsedQuery = parsedQuery.Replace(trigger, "1");
@@ -48,59 +48,11 @@ namespace CodeInUnity.StateMachine
         parsedQuery = parsedQuery.Replace("true", "1");
         parsedQuery = parsedQuery.Replace("false", "0");
 
-        var ands = new List<bool>();
-
-        foreach (var qor in parsedQuery.Split(new[] { "||" }, StringSplitOptions.None))
+        if (!parsedQuery.Contains("||"))
         {
-          foreach (var qand in qor.Split(new[] { "&&" }, StringSplitOptions.None))
-          {
-            for (int i = 0; i < ops.Length; i++)
-            {
-              var op = ops[i];
-              var idx = qand.IndexOf(op);
-              if (idx != -1)
-              {
-                bool result;
+          var ands = new List<bool>();
 
-                float left;
-
-                if (!float.TryParse(qand.Remove(idx).Trim(), NumberStyles.Float, CultureInfo.InvariantCulture, out left))
-                {
-                  result = false;
-                }
-                else
-                {
-                  float right = float.Parse(qand.Substring(idx + op.Length).Trim(), CultureInfo.InvariantCulture);
-
-                  switch (op)
-                  {
-                    case "==":
-                      result = left == right;
-                      break;
-                    case "!=":
-                      result = left != right;
-                      break;
-                    case "<":
-                      result = left < right;
-                      break;
-                    case ">":
-                      result = left > right;
-                      break;
-                    case "<=":
-                      result = left <= right;
-                      break;
-                    case ">=":
-                      result = left >= right;
-                      break;
-                    default:
-                      throw new InvalidOperationException($"Invalid condition operator: {op}");
-                  }
-                }
-
-                ands.Add(result);
-              }
-            }   //  Foreach "ops"
-          }   //  Foreach "ands"
+          this.ParseAndsFromOr(parsedQuery, ands);
 
           bool value = ands.Count > 0 && ands.TrueForAll(m => m);
 
@@ -108,12 +60,109 @@ namespace CodeInUnity.StateMachine
           {
             return true;
           }
-        }   //  Foreach "ors"
+        }
+        else
+        {
+          foreach (var qor in parsedQuery.Split(new[] { "||" }, StringSplitOptions.None))
+          {
+            var ands = new List<bool>();
+
+            this.ParseAndsFromOr(qor, ands);
+
+            bool value = ands.Count > 0 && ands.TrueForAll(m => m);
+
+            if (value)
+            {
+              return true;
+            }
+          }   //  Foreach "ors"
+        }
 
         return false;
       }
 
       return false;
+    }
+
+    private void ParseAndsFromOr(string qor, List<bool> ands)
+    {
+      if (!qor.Contains("&&"))
+      {
+        this.ParseAnds(qor, ands);
+        return;
+      }
+
+      foreach (var qand in qor.Split(new[] { "&&" }, StringSplitOptions.None))
+      {
+        this.ParseAnds(qand, ands);
+      }
+    }
+
+    private void ParseAnds(string qand, List<bool> ands, bool cutOnFirstFalse = true)
+    {
+      int opsLength = ops.Length;
+
+      for (int i = 0; i < opsLength; i++)
+      {
+        var op = ops[i];
+        var idx = qand.IndexOf(op);
+        if (idx != -1)
+        {
+          bool result;
+
+          float left;
+
+          if (!float.TryParse(qand.Remove(idx).Trim(), NumberStyles.Float, CultureInfo.InvariantCulture, out left))
+          {
+            result = false;
+          }
+          else
+          {
+            float right = float.Parse(qand.Substring(idx + op.Length).Trim(), CultureInfo.InvariantCulture);
+
+            result = this.ApplyOperator(op, left, right);
+          }
+
+          ands.Add(result);
+
+          //  Optimization
+          if (!result && cutOnFirstFalse)
+          {
+            return;
+          }
+        }
+      }
+    }
+
+    private bool ApplyOperator(string op, float left, float right)
+    {
+      bool result;
+
+      switch (op)
+      {
+        case "==":
+          result = left == right;
+          break;
+        case "!=":
+          result = left != right;
+          break;
+        case "<":
+          result = left < right;
+          break;
+        case ">":
+          result = left > right;
+          break;
+        case "<=":
+          result = left <= right;
+          break;
+        case ">=":
+          result = left >= right;
+          break;
+        default:
+          throw new InvalidOperationException($"Invalid condition operator: {op}");
+      }
+
+      return result;
     }
   }
 }
