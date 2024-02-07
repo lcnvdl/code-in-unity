@@ -1,9 +1,24 @@
 {
   "name": "unity.code-in-unity",
+  "displayName": "CodeInUnity",
+  "author": {
+    "name": "Luciano Rasente",
+    "url": "https://github.com/lcnvdl"
+  },
   "version": "1.0.0",
-  "description": "",
+  "unity": "2021.1",
+  "description": "Provide a collection of common classes and extensions for use in unity.",
+  "keywords": [
+    "Forja Games",
+    "CodeInUnity",
+    "Common"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lcnvdl/code-in-unity"
+  },
+  "license": "MIT",
+  "dependencies": {},
   "scripts": {},
-  "keywords": [],
-  "author": "Forja Games",
-  "license": "ISC"
+  "samples": []
 }
