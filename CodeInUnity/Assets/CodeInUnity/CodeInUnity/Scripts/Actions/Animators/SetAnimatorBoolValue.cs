@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 
-public class SetAnimatorBoolValue : ActionScript
+namespace CodeInUnity.Scripts.Actions.Animators
 {
+  public class SetAnimatorBoolValue : ActionScript
+  {
     public Animator target;
 
     public string variableName;
@@ -10,28 +12,30 @@ public class SetAnimatorBoolValue : ActionScript
 
     public void RunWithNameAndValue(string overrideName, bool overrideValue)
     {
-        this.variableName = overrideName;
-        this.targetValue = overrideValue;
+      this.variableName = overrideName;
+      this.targetValue = overrideValue;
 
-        this.ExecuteAction();
+      this.ExecuteAction();
     }
 
     public void RunWithValue(bool overrideValue)
     {
-        this.targetValue = overrideValue;
-        this.ExecuteAction();
+      this.targetValue = overrideValue;
+      this.ExecuteAction();
     }
 
     protected override void Run()
     {
-        if (target == null)
-        {
-            target = GetComponent<Animator>();
-        }
+      if (target == null)
+      {
+        target = GetComponent<Animator>();
+      }
 
-        if (target != null)
-        {
-            target.SetBool(variableName, targetValue);
-        }
+      if (target != null)
+      {
+        target.SetBool(variableName, targetValue);
+      }
     }
+  }
+
 }

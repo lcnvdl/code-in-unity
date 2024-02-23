@@ -1,8 +1,10 @@
 ﻿using CodeInUnity.Core.Utils;
 using UnityEngine;
 
-public class Move : ActionScript
+namespace CodeInUnity.Scripts.Actions.Movement
 {
+  public class Move : ActionScript
+  {
     public Transform target;
 
     public Vector3 speed;
@@ -13,15 +15,16 @@ public class Move : ActionScript
 
     protected override void Run()
     {
-        isEnabled = true;
+      isEnabled = true;
     }
 
     private void Update()
     {
-        if (isEnabled)
-        {
-            var realTarget = ArrayUtils.PickFirstNotNull(target, transform);
-            realTarget.position += speed * Time.deltaTime;
-        }
+      if (isEnabled)
+      {
+        var realTarget = ArrayUtils.PickFirstNotNull(target, transform);
+        realTarget.position += speed * Time.deltaTime;
+      }
     }
+  }
 }

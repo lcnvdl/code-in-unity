@@ -1,13 +1,14 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class SetGameSpeed : ActionScript
+namespace CodeInUnity.Scripts.Actions.Misc
 {
+  public class SetGameSpeed : ActionScript
+  {
     public float speed = 1;
 
     protected override void Run()
     {
-        Time.timeScale = speed;
+      Time.timeScale = speed;
     }
+  }
 }

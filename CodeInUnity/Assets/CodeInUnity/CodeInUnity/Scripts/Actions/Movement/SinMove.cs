@@ -1,9 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class SinMove : MonoBehaviour
+namespace CodeInUnity.Scripts.Actions.Movement
 {
+  public class SinMove : MonoBehaviour
+  {
     public float frequency = 1f;
 
     public Vector3 amplitude = new Vector3(0, 1, 0);
@@ -14,18 +14,19 @@ public class SinMove : MonoBehaviour
 
     private void Start()
     {
-        this.initialPosition = transform.position;
+      this.initialPosition = transform.position;
     }
 
     void FixedUpdate()
     {
-        if (relativeToInitialPosition)
-        {
-            transform.position = this.initialPosition + this.amplitude * Mathf.Sin(Time.fixedTime * this.frequency);
-        }
-        else
-        {
-            transform.localPosition = this.amplitude * Mathf.Sin(Time.fixedTime * this.frequency);
-        }
+      if (relativeToInitialPosition)
+      {
+        transform.position = this.initialPosition + this.amplitude * Mathf.Sin(Time.fixedTime * this.frequency);
+      }
+      else
+      {
+        transform.localPosition = this.amplitude * Mathf.Sin(Time.fixedTime * this.frequency);
+      }
     }
+  }
 }

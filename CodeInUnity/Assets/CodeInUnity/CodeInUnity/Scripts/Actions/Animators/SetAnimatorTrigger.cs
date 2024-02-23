@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 
-public class SetAnimatorTrigger : ActionScript
+namespace CodeInUnity.Scripts.Actions.Animators
 {
+  public class SetAnimatorTrigger : ActionScript
+  {
     public Animator target;
 
     public string variableName;
@@ -10,28 +12,29 @@ public class SetAnimatorTrigger : ActionScript
 
     public void RunWithNameAndValue(string overrideName, string overrideValue)
     {
-        this.variableName = overrideName;
-        this.targetValue = overrideValue;
+      this.variableName = overrideName;
+      this.targetValue = overrideValue;
 
-        this.ExecuteAction();
+      this.ExecuteAction();
     }
 
     public void RunWithValue(string overrideValue)
     {
-        this.targetValue = overrideValue;
-        this.ExecuteAction();
+      this.targetValue = overrideValue;
+      this.ExecuteAction();
     }
 
     protected override void Run()
     {
-        if (target == null)
-        {
-            target = GetComponent<Animator>();
-        }
+      if (target == null)
+      {
+        target = GetComponent<Animator>();
+      }
 
-        if (target != null)
-        {
-            target.SetTrigger(variableName);
-        }
+      if (target != null)
+      {
+        target.SetTrigger(variableName);
+      }
     }
+  }
 }

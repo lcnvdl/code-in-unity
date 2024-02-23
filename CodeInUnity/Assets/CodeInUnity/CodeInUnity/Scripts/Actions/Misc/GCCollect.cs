@@ -1,9 +1,12 @@
 ﻿using System;
 
-public class GCCollect : ActionScript
+namespace CodeInUnity.Scripts.Actions.Misc
 {
-  protected override void Run()
+  public class GCCollect : ActionScript
   {
-    GC.Collect();
+    protected override void Run()
+    {
+      GC.Collect();
+    }
   }
 }

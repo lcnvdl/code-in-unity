@@ -129,24 +129,24 @@ public class FaderScript : MonoBehaviour
 
   public static void FadeOutIn(Color color, float duration, float hodl)
   {
-    FaderScript.Instance.gameObject.SetActive(false);
-    FaderScript.Instance.hodl = hodl;
-    FaderScript.Instance.duration = duration;
-    FaderScript.Instance.onlyFadeIn = false;
-    FaderScript.Instance.fadeColor = color;
-    FaderScript.Instance.gameObject.SetActive(true);
+    Instance.gameObject.SetActive(false);
+    Instance.hodl = hodl;
+    Instance.duration = duration;
+    Instance.onlyFadeIn = false;
+    Instance.fadeColor = color;
+    Instance.gameObject.SetActive(true);
   }
 
   public static void FadeIn(float duration = 1f) => FadeIn(Color.black, duration);
 
   public static void FadeIn(Color color, float duration)
   {
-    FaderScript.Instance.gameObject.SetActive(false);
-    FaderScript.Instance.hodl = 0;
-    FaderScript.Instance.duration = duration;
-    FaderScript.Instance.onlyFadeIn = true;
-    FaderScript.Instance.fadeColor = color;
-    FaderScript.Instance.gameObject.SetActive(true);
+    Instance.gameObject.SetActive(false);
+    Instance.hodl = 0;
+    Instance.duration = duration;
+    Instance.onlyFadeIn = true;
+    Instance.fadeColor = color;
+    Instance.gameObject.SetActive(true);
   }
 
   private void UpdateColor()

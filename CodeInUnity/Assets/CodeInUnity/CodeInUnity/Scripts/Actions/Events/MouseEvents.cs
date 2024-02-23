@@ -1,8 +1,10 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
 
-public class MouseEvents : MonoBehaviour
+namespace CodeInUnity.Scripts.Actions.Events
 {
+  public class MouseEvents : MonoBehaviour
+  {
     public UnityEvent mouseDown;
     public UnityEvent mouseEnter;
     public UnityEvent mouseLeave;
@@ -10,21 +12,22 @@ public class MouseEvents : MonoBehaviour
 
     void OnMouseUp()
     {
-        mouseUp?.Invoke();
+      mouseUp?.Invoke();
     }
 
     void OnMouseDown()
     {
-        mouseDown?.Invoke();
+      mouseDown?.Invoke();
     }
 
     void OnMouseOver()
     {
-        mouseEnter?.Invoke();
+      mouseEnter?.Invoke();
     }
 
     void OnMouseExit()
     {
-        mouseLeave?.Invoke();
+      mouseLeave?.Invoke();
     }
+  }
 }

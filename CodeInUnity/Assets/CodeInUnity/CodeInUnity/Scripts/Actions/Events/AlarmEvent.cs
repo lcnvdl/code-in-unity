@@ -2,8 +2,10 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-public class AlarmEvent : ActionScript
+namespace CodeInUnity.Scripts.Actions.Events
 {
+  public class AlarmEvent : ActionScript
+  {
     public float delay;
 
     public bool loop = false;
@@ -12,17 +14,18 @@ public class AlarmEvent : ActionScript
 
     protected override void Run()
     {
-        StartCoroutine(Timer());
+      StartCoroutine(Timer());
     }
 
     IEnumerator Timer()
     {
-        do
-        {
-            yield return new WaitForSeconds(delay);
+      do
+      {
+        yield return new WaitForSeconds(delay);
 
-            onTimeout.Invoke();
-        }
-        while (loop);
+        onTimeout.Invoke();
+      }
+      while (loop);
     }
+  }
 }

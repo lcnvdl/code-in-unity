@@ -1,11 +1,14 @@
 ﻿using UnityEngine.SceneManagement;
 
-public class AddScene : ActionScript
+namespace CodeInUnity.Scripts.Actions.Scenes
 {
+  public class AddScene : ActionScript
+  {
     public string sceneName;
 
     protected override void Run()
     {
-        SceneManager.LoadScene(sceneName, LoadSceneMode.Additive);
+      SceneManager.LoadScene(sceneName, LoadSceneMode.Additive);
     }
+  }
 }

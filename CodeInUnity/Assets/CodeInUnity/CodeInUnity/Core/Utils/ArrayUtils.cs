@@ -2,7 +2,7 @@
 
 namespace CodeInUnity.Core.Utils
 {
-    public class ArrayUtils
+    public static class ArrayUtils
     {
         public static T Choose<T>(params T[] array)
         {

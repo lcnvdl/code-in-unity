@@ -1,8 +1,10 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-public class IsEditorConditionEvent : MonoBehaviour
+namespace CodeInUnity.Scripts.Actions.Events
 {
+  public class IsEditorConditionEvent : MonoBehaviour
+  {
     public UnityEvent onTrue;
 
     public UnityEvent onFalse;
@@ -11,29 +13,30 @@ public class IsEditorConditionEvent : MonoBehaviour
 
     private void Awake()
     {
-        if (callOnAwake)
-        {
-            Call();
-        }
+      if (callOnAwake)
+      {
+        Call();
+      }
     }
 
     private void Start()
     {
-        if (!callOnAwake)
-        {
-            Call();
-        }
+      if (!callOnAwake)
+      {
+        Call();
+      }
     }
 
     private void Call()
     {
-        if (Application.isEditor)
-        {
-            onTrue.Invoke();
-        }
-        else
-        {
-            onFalse.Invoke();
-        }
+      if (Application.isEditor)
+      {
+        onTrue.Invoke();
+      }
+      else
+      {
+        onFalse.Invoke();
+      }
     }
+  }
 }

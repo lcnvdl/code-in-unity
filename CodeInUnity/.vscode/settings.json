@@ -52,5 +52,6 @@
         "temp/":true,
         "Temp/":true
     },
-    "dotnet.defaultSolution": "CodeInUnity.sln"
+    "dotnet.defaultSolution": "CodeInUnity.sln",
+    "dotnet.preferCSharpExtension": true
 }

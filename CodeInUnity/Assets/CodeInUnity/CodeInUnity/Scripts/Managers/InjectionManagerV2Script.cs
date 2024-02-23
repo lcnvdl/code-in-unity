@@ -152,7 +152,12 @@ public class InjectionManagerV2Script : MonoBehaviour, IInjectorV2Instance
 
     if (!objects.TryGetValue(typeof(T).FullName, out val))
     {
-      T result = FindObjectOfType<T>();
+      T result = FindAnyObjectByType<T>(FindObjectsInactive.Exclude);
+
+      if (result == null)
+      {
+        result = FindAnyObjectByType<T>(FindObjectsInactive.Include);
+      }
 
       if (result != null)
       {

@@ -1,9 +1,10 @@
-﻿using CodeInUnity.Actions.Base;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Events;
 
-public class MoveTowards : MonoBehaviour, ITargeteable
+namespace CodeInUnity.Scripts.Actions.Movement
 {
+  public class MoveTowards : MonoBehaviour, ITargeteable
+  {
     public Transform target;
     public float speed = 1f;
     public float miniumDistance = 0.001f;
@@ -24,35 +25,36 @@ public class MoveTowards : MonoBehaviour, ITargeteable
 
     void Update()
     {
-        if (finished)
+      if (finished)
+      {
+        return;
+      }
+
+      Vector3 targetPosition;
+
+      if (target == null)
+      {
+        targetPosition = lastTargetPosition;
+      }
+      else
+      {
+        targetPosition = new Vector3(target.position.x, lockYAxis ? transform.position.y : target.position.y, target.position.z);
+        lastTargetPosition = targetPosition;
+      }
+
+      float step = speed * Time.deltaTime;
+      transform.position = Vector3.MoveTowards(transform.position, targetPosition, step);
+
+      if (Vector3.Distance(transform.position, targetPosition) < miniumDistance)
+      {
+        if (!stopOnCloser)
         {
-            return;
+          transform.position = targetPosition;
         }
 
-        Vector3 targetPosition;
-
-        if (target == null)
-        {
-            targetPosition = lastTargetPosition;
-        }
-        else
-        {
-            targetPosition = new Vector3(target.position.x, lockYAxis ? transform.position.y : target.position.y, target.position.z);
-            lastTargetPosition = targetPosition;
-        }
-
-        float step = speed * Time.deltaTime;
-        transform.position = Vector3.MoveTowards(transform.position, targetPosition, step);
-
-        if (Vector3.Distance(transform.position, targetPosition) < miniumDistance)
-        {
-            if (!stopOnCloser)
-            {
-                transform.position = targetPosition;
-            }
-
-            finished = true;
-            onFinish.Invoke();
-        }
+        finished = true;
+        onFinish.Invoke();
+      }
     }
+  }
 }

@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace CodeInUnity.Actions.Base
+namespace CodeInUnity.Scripts.Actions
 {
-    public interface ITargeteable
+  public interface ITargeteable
     {
         Transform Target { get; set; }
     }

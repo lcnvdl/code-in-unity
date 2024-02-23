@@ -1,17 +1,20 @@
 ﻿using CodeInUnity.Core.Utils;
 using UnityEngine;
 
-public class DisableBody : ActionScript
+namespace CodeInUnity.Scripts.Actions.Physics
 {
+  public class DisableBody : ActionScript
+  {
     public Transform target;
 
     protected override void Run()
     {
-        var bodies = ArrayUtils.PickFirstNotNull(target, transform).GetComponentsInChildren<Rigidbody>();
-        foreach (var body in bodies)
-        {
-            body.isKinematic = true;
-            body.detectCollisions = false;
-        }
+      var bodies = ArrayUtils.PickFirstNotNull(target, transform).GetComponentsInChildren<Rigidbody>();
+      foreach (var body in bodies)
+      {
+        body.isKinematic = true;
+        body.detectCollisions = false;
+      }
     }
+  }
 }

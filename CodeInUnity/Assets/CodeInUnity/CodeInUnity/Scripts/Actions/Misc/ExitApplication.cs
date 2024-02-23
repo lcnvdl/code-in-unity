@@ -1,9 +1,12 @@
 ﻿using UnityEngine;
 
-public class ExitApplication : ActionScript
+namespace CodeInUnity.Scripts.Actions.Misc
 {
+  public class ExitApplication : ActionScript
+  {
     protected override void Run()
     {
-        Application.Quit();
+      Application.Quit();
     }
+  }
 }

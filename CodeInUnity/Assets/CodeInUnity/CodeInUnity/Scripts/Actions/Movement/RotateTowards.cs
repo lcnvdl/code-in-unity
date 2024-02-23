@@ -1,9 +1,10 @@
-﻿using CodeInUnity.Actions.Base;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Events;
 
-public class RotateTowards : MonoBehaviour, ITargeteable
+namespace CodeInUnity.Scripts.Actions.Movement
 {
+  public class RotateTowards : MonoBehaviour, ITargeteable
+  {
     public Transform target;
     public float speed = 1f;
     //public bool onlyYAxis = false;
@@ -22,26 +23,27 @@ public class RotateTowards : MonoBehaviour, ITargeteable
 
     void Update()
     {
-        if (finished)
-        {
-            return;
-        }
+      if (finished)
+      {
+        return;
+      }
 
-        if (target == null)
-        {
-            finished = true;
-            onFinish.Invoke();
-            return;
-        }
-        
-        var targetRotation = Quaternion.LookRotation(target.position - transform.position);
+      if (target == null)
+      {
+        finished = true;
+        onFinish.Invoke();
+        return;
+      }
 
-        transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, speed * Time.deltaTime);
+      var targetRotation = Quaternion.LookRotation(target.position - transform.position);
 
-        if (transform.rotation == targetRotation)
-        {
-            finished = true;
-            onFinish.Invoke();
-        }
+      transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, speed * Time.deltaTime);
+
+      if (transform.rotation == targetRotation)
+      {
+        finished = true;
+        onFinish.Invoke();
+      }
     }
+  }
 }

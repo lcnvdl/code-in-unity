@@ -1,15 +1,16 @@
-using System.Collections;
-using UnityEngine;
 using UnityEngine.Events;
 
-public class StartIfIsServerEvent : ActionScript
+namespace CodeInUnity.Scripts.Actions.Events
 {
+  public class StartIfIsServerEvent : ActionScript
+  {
     public UnityEvent onStart;
 
     protected override void Run()
     {
-        //  TODO    Check if is server
+      //  TODO    Check if is server
 
-        onStart.Invoke();
+      onStart.Invoke();
     }
+  }
 }

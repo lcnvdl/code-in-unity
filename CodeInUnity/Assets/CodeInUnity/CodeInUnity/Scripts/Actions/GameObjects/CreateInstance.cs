@@ -1,9 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class CreateInstance : ActionScript
+namespace CodeInUnity.Scripts.Actions.GameObjects
 {
+  public class CreateInstance : ActionScript
+  {
     public GameObject prefab;
     public Vector3 position;
     public Vector3 rotation;
@@ -11,18 +11,19 @@ public class CreateInstance : ActionScript
 
     public void CallAction()
     {
-        ExecuteAction();
+      ExecuteAction();
     }
 
     protected override void Run()
     {
-        if (!relative)
-        {
-            GameObject.Instantiate(prefab, position, Quaternion.Euler(rotation));
-        }
-        else
-        {
-            GameObject.Instantiate(prefab, transform.position + position, Quaternion.Euler(transform.eulerAngles + rotation));
-        }
+      if (!relative)
+      {
+        GameObject.Instantiate(prefab, position, Quaternion.Euler(rotation));
+      }
+      else
+      {
+        GameObject.Instantiate(prefab, transform.position + position, Quaternion.Euler(transform.eulerAngles + rotation));
+      }
     }
+  }
 }

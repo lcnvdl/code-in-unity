@@ -1,24 +1,24 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.Events;
+﻿using UnityEngine;
 
-public abstract class ActionScript : MonoBehaviour
+namespace CodeInUnity.Scripts.Actions
 {
+  public abstract class ActionScript : MonoBehaviour
+  {
     public bool callOnStart;
 
     protected virtual void Start()
     {
-        if (callOnStart)
-        {
-            ExecuteAction();
-        }
+      if (callOnStart)
+      {
+        ExecuteAction();
+      }
     }
 
     public virtual void ExecuteAction()
     {
-        Run();
+      Run();
     }
 
     protected abstract void Run();
+  }
 }

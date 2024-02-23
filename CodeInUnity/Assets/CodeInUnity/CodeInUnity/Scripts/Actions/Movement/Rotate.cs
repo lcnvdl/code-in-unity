@@ -1,8 +1,10 @@
 ﻿using CodeInUnity.Core.Utils;
 using UnityEngine;
 
-public class Rotate : ActionScript
+namespace CodeInUnity.Scripts.Actions.Movement
 {
+  public class Rotate : ActionScript
+  {
     public Transform target;
 
     public float xSpeed = 0;
@@ -15,15 +17,16 @@ public class Rotate : ActionScript
 
     protected override void Run()
     {
-        isEnabled = true;
+      isEnabled = true;
     }
 
     private void Update()
     {
-        if (isEnabled)
-        {
-            var realTarget = ArrayUtils.PickFirstNotNull(target, transform);
-            realTarget.rotation = Quaternion.Euler(realTarget.rotation.eulerAngles + new Vector3(xSpeed, ySpeed, zSpeed) * Time.deltaTime);
-        }
+      if (isEnabled)
+      {
+        var realTarget = ArrayUtils.PickFirstNotNull(target, transform);
+        realTarget.rotation = Quaternion.Euler(realTarget.rotation.eulerAngles + new Vector3(xSpeed, ySpeed, zSpeed) * Time.deltaTime);
+      }
     }
+  }
 }

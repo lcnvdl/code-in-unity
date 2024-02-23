@@ -1,10 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class FadeOutSprite : ActionScript
+namespace CodeInUnity.Scripts.Actions.Sprites
 {
+  public class FadeOutSprite : ActionScript
+  {
     public SpriteRenderer sprite;
 
     public float timeInSeconds = 1f;
@@ -29,35 +29,36 @@ public class FadeOutSprite : ActionScript
 
     public void CallAction()
     {
-        ExecuteAction();
+      ExecuteAction();
     }
 
     protected override void Run()
     {
-        this.isEnabled = true;
-        this.initialAlpha = sprite.color.a;
+      this.isEnabled = true;
+      this.initialAlpha = sprite.color.a;
     }
 
     private void Update()
     {
-        if (isEnabled)
+      if (isEnabled)
+      {
+        if (!this.isFinished)
         {
-            if (!this.isFinished)
-            {
-                this.totalTime += Time.deltaTime;
+          this.totalTime += Time.deltaTime;
 
-                if (this.totalTime >= this.timeInSeconds)
-                {
-                    this.totalTime = this.timeInSeconds;
-                    this.isFinished = true;
+          if (this.totalTime >= this.timeInSeconds)
+          {
+            this.totalTime = this.timeInSeconds;
+            this.isFinished = true;
 
-                    this.onFinish.Invoke();
-                }
+            this.onFinish.Invoke();
+          }
 
-                float targetAlpha = this.initialAlpha - (this.initialAlpha * this.totalTime / this.timeInSeconds);
+          float targetAlpha = this.initialAlpha - (this.initialAlpha * this.totalTime / this.timeInSeconds);
 
-                this.sprite.color = new Color(this.sprite.color.r, this.sprite.color.g, this.sprite.color.b, targetAlpha);
-            }
+          this.sprite.color = new Color(this.sprite.color.r, this.sprite.color.g, this.sprite.color.b, targetAlpha);
         }
+      }
     }
+  }
 }

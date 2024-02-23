@@ -1,8 +1,9 @@
-using CodeInUnity.Core.Utils;
 using UnityEngine;
 
-public class RotateNoGC : ActionScript
+namespace CodeInUnity.Scripts.Actions.Movement
 {
+  public class RotateNoGC : ActionScript
+  {
     public Transform target;
 
     public float xSpeed = 0;
@@ -15,19 +16,20 @@ public class RotateNoGC : ActionScript
 
     protected override void Run()
     {
-        isEnabled = true;
+      isEnabled = true;
     }
 
     private void Update()
     {
-        if (isEnabled)
+      if (isEnabled)
+      {
+        if (target == null)
         {
-            if (target == null)
-            {
-                target = transform;
-            }
-
-            target.rotation = Quaternion.Euler(target.rotation.eulerAngles + new Vector3(xSpeed, ySpeed, zSpeed) * Time.deltaTime);
+          target = transform;
         }
+
+        target.rotation = Quaternion.Euler(target.rotation.eulerAngles + new Vector3(xSpeed, ySpeed, zSpeed) * Time.deltaTime);
+      }
     }
+  }
 }
