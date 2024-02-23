@@ -1,9 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class EnableIfEditor : MonoBehaviour
+namespace CodeInUnity.Scripts.Tools
 {
+  public class EnableIfEditor : MonoBehaviour
+  {
     public bool enable = true;
 
     public bool disable = false;
@@ -14,44 +14,45 @@ public class EnableIfEditor : MonoBehaviour
 
     private Transform[] InstancesToEnable
     {
-        get
-        {
+      get
+      {
 #if UNITY_EDITOR
-            return positive;
+        return positive;
 #else
-            return negative;
+        return negative;
 #endif
-        }
+      }
     }
 
     private Transform[] InstancesToDisable
     {
-        get
-        {
+      get
+      {
 #if UNITY_EDITOR
-            return negative;
+        return negative;
 #else
-            return positive;
+        return positive;
 #endif
-        }
+      }
     }
 
     void OnEnable()
     {
-        foreach (var instance in InstancesToEnable)
+      foreach (var instance in InstancesToEnable)
+      {
+        if (enable)
         {
-            if (enable)
-            {
-                instance.gameObject.SetActive(true);
-            }
+          instance.gameObject.SetActive(true);
         }
-        
-        foreach (var instance in InstancesToDisable)
+      }
+
+      foreach (var instance in InstancesToDisable)
+      {
+        if (disable)
         {
-            if (disable)
-            {
-                instance.gameObject.SetActive(false);
-            }
+          instance.gameObject.SetActive(false);
         }
+      }
     }
+  }
 }

@@ -1,6 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using CodeInUnity.Scripts.Sounds;
+using CodeInUnity.Core.Sounds;
 using UnityEngine;
 
 public class AudioManagerScript : MonoBehaviour

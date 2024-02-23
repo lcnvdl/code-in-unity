@@ -1,8 +1,9 @@
+using System;
 using UnityEngine;
 
-namespace CodeInUnity.Scripts.Sounds
+namespace CodeInUnity.Core.Sounds
 {
-    [System.Serializable]
+    [Serializable]
     public class AudioData
     {
         public string name;
