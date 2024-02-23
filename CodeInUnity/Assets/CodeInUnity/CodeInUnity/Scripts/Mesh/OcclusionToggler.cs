@@ -1,10 +1,6 @@
+using CodeInUnity.Core.Enums;
 using UnityEngine;
 
-public enum OcclusionStatus
-{
-    Enabled,
-    Disabled
-}
 
 public class OcclusionToggler : MonoBehaviour
 {

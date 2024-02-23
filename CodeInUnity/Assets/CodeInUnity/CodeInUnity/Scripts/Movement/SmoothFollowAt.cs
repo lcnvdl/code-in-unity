@@ -1,9 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class SmoothFollowAt : MonoBehaviour
+namespace CodeInUnity.Scripts.Movement
 {
+  public class SmoothFollowAt : MonoBehaviour
+  {
     public Transform target;
 
     public Vector3 deltaPosition;
@@ -18,20 +18,21 @@ public class SmoothFollowAt : MonoBehaviour
 
     void Start()
     {
-        if (autoCalculateDeltas)
-        {
-            deltaPosition = transform.position - target.position;
+      if (autoCalculateDeltas)
+      {
+        deltaPosition = transform.position - target.position;
 
-            deltaRotation = transform.rotation.eulerAngles - target.rotation.eulerAngles;
-        }
+        deltaRotation = transform.rotation.eulerAngles - target.rotation.eulerAngles;
+      }
     }
 
     void Update()
     {
-        var targetRotation = Quaternion.Euler(target.rotation.eulerAngles + deltaRotation);
+      var targetRotation = Quaternion.Euler(target.rotation.eulerAngles + deltaRotation);
 
-        transform.SetPositionAndRotation(
-            Vector3.MoveTowards(transform.position, target.position + deltaPosition, speed * Time.deltaTime),
-            Quaternion.RotateTowards(transform.rotation, targetRotation, angularSpeed * Time.deltaTime));
+      transform.SetPositionAndRotation(
+          Vector3.MoveTowards(transform.position, target.position + deltaPosition, speed * Time.deltaTime),
+          Quaternion.RotateTowards(transform.rotation, targetRotation, angularSpeed * Time.deltaTime));
     }
+  }
 }

@@ -2,8 +2,10 @@
 using UnityEngine;
 using UnityEngine.Rendering;
 
-public class GPUMeshAutoOptimizeScript : MonoBehaviour
+namespace CodeInUnity.Scripts.Optimizations
 {
+  public class GPUMeshAutoOptimizeScript : MonoBehaviour
+  {
     public Mesh mesh;
 
     public Material[] materials;
@@ -25,81 +27,82 @@ public class GPUMeshAutoOptimizeScript : MonoBehaviour
 
     private void Start()
     {
-        materialPropertyBlock = new MaterialPropertyBlock();
+      materialPropertyBlock = new MaterialPropertyBlock();
     }
 
     public void BeginOptimization(Transform[] instancesToOptimize)
     {
-        //  Reset
-        this.batches.Clear();
-        this.instancesToOptimize = instancesToOptimize;
-        this.mesh = null;
-        this.materials = null;
+      //  Reset
+      this.batches.Clear();
+      this.instancesToOptimize = instancesToOptimize;
+      this.mesh = null;
+      this.materials = null;
 
-        //  Prepare
-        foreach (var instance in instancesToOptimize)
+      //  Prepare
+      foreach (var instance in instancesToOptimize)
+      {
+        var meshRenderer = instance.GetComponent<MeshRenderer>();
+
+        if (meshRenderer != null)
         {
-            var meshRenderer = instance.GetComponent<MeshRenderer>();
+          if (this.mesh == null)
+          {
+            var meshFilter = instance.GetComponent<MeshFilter>();
+            this.mesh = meshFilter.mesh;
+            this.materials = meshRenderer.materials;
+          }
 
-            if (meshRenderer != null)
-            {
-                if (this.mesh == null)
-                {
-                    var meshFilter = instance.GetComponent<MeshFilter>();
-                    this.mesh = meshFilter.mesh;
-                    this.materials = meshRenderer.materials;
-                }
-
-                meshRenderer.enabled = false;
-            }
-
-            if (afterLoad == GPUMeshChildrenAutoOptimizeAfterLoadAction.Deactivate)
-            {
-                instance.gameObject.SetActive(false);
-            }
-            else if (afterLoad == GPUMeshChildrenAutoOptimizeAfterLoadAction.Deactivate)
-            {
-                Destroy(instance.gameObject);
-            }
+          meshRenderer.enabled = false;
         }
 
-        //  Generate batches
-        int addedMatricies = 0;
-
-        for (int i = 0; i < instancesToOptimize.Length; i++)
+        if (afterLoad == GPUMeshChildrenAutoOptimizeAfterLoadAction.Deactivate)
         {
-            if (addedMatricies % 1000 == 0)
-            {
-                //Debug.Log("Matrix chunk added at " + i);
-                batches.Add(new List<Matrix4x4>());
-            }
+          instance.gameObject.SetActive(false);
+        }
+        else if (afterLoad == GPUMeshChildrenAutoOptimizeAfterLoadAction.Deactivate)
+        {
+          Destroy(instance.gameObject);
+        }
+      }
 
-            batches[batches.Count - 1].Add(Matrix4x4.TRS(
-                instancesToOptimize[i].transform.position,
-                instancesToOptimize[i].transform.rotation,
-                instancesToOptimize[i].transform.lossyScale));
+      //  Generate batches
+      int addedMatricies = 0;
+
+      for (int i = 0; i < instancesToOptimize.Length; i++)
+      {
+        if (addedMatricies % 1000 == 0)
+        {
+          //Debug.Log("Matrix chunk added at " + i);
+          batches.Add(new List<Matrix4x4>());
         }
 
-        //  Start
-        this.isOptimizing = true;
+        batches[batches.Count - 1].Add(Matrix4x4.TRS(
+            instancesToOptimize[i].transform.position,
+            instancesToOptimize[i].transform.rotation,
+            instancesToOptimize[i].transform.lossyScale));
+      }
+
+      //  Start
+      this.isOptimizing = true;
     }
 
     private void Update()
     {
-        if (this.isOptimizing)
-        {
-            RenderBatches();
-        }
+      if (this.isOptimizing)
+      {
+        RenderBatches();
+      }
     }
 
     private void RenderBatches()
     {
-        foreach (var batch in batches)
+      foreach (var batch in batches)
+      {
+        for (int i = 0; i < mesh.subMeshCount; i++)
         {
-            for (int i = 0; i < mesh.subMeshCount; i++)
-            {
-                Graphics.DrawMeshInstanced(mesh, i, materials[i], batch, materialPropertyBlock, shadowCastingMode, receiveShadows);
-            }
+          Graphics.DrawMeshInstanced(mesh, i, materials[i], batch, materialPropertyBlock, shadowCastingMode, receiveShadows);
         }
+      }
     }
+  }
 }

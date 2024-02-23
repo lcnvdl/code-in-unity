@@ -1,17 +1,11 @@
-using System;
+using CodeInUnity.Core.Events;
 using UnityEngine;
-using UnityEngine.Events;
-
-[Serializable]
-public class PauseEvent : UnityEvent<bool>
-{
-}
 
 public class PauseManager : MonoBehaviour
 {
     public static PauseManager Instance { get; private set; }
 
-    public PauseEvent pauseChanged;
+    public BoolUnityEvent pauseChanged;
 
     public bool IsPaused => Time.timeScale == 0;
 
