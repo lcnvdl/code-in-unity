@@ -56,28 +56,44 @@ public class InjectionManagerV2Script : MonoBehaviour, IInjectorV2Instance
   void OnEnable()
   {
     //var ass = System.Reflection.Assembly.GetExecutingAssembly();
+    List<string> keysToDelete = new List<string>();
 
-    foreach (var bt in bindingTransforms)
+    foreach (var kv in this.bindingTransforms)
     {
-      //Type t = ass.GetType(bt.key);
+      var asInterface = this.bindingInterfaces.Find(m => m.key == kv.key);
 
-      //if (t == null)
-      //{
-      //Debug.LogWarning($"Optimization throuble: Null type for key {bt.key}.");
-      //}
+      var allComponents = kv.transform.GetComponents<MonoBehaviour>();
 
-      var asInterface = this.bindingInterfaces.Find(m => m.key == bt.key);
+      var component = allComponents.FirstOrDefault(m =>
+        asInterface == null ?
+        m.GetType().FullName == kv.key :
+        m.GetType().FullName == asInterface.value);
 
-      var allComponents = bt.transform.GetComponents<MonoBehaviour>();
-
-      var component = allComponents.FirstOrDefault(m => asInterface == null ? m.GetType().FullName == bt.key : m.GetType().FullName == asInterface.value);
       if (component == null)
       {
-        Debug.LogWarning($"Null component for key {bt.key}.");
+        keysToDelete.Add(kv.key);
+        Debug.LogWarning($"Null component for key {kv.key}.");
         continue;
       }
 
-      objects[bt.key] = component;
+      try
+      {
+        bool isActiveAndEnabled = component.isActiveAndEnabled;
+      }
+      catch (MissingReferenceException)
+      {
+        keysToDelete.Add(kv.key);
+        Debug.LogWarning($"Null (destroyed) component for key {kv.key}.");
+        continue;
+      }
+
+      objects[kv.key] = component;
+    }
+
+    foreach (var toDelete in keysToDelete)
+    {
+      objects.Remove(toDelete);
+      this.bindingTransforms.RemoveAll(m => m.key == toDelete);
     }
   }
 
@@ -88,6 +104,8 @@ public class InjectionManagerV2Script : MonoBehaviour, IInjectorV2Instance
 
     foreach (var kv in this.objects)
     {
+      string interfaceKey = kv.Key;
+
       if (kv.Value is Component)
       {
         var component = (Component)kv.Value;
@@ -96,24 +114,26 @@ public class InjectionManagerV2Script : MonoBehaviour, IInjectorV2Instance
           continue;
         }
 
-        if (kv.Value.GetType().Name != kv.Key)
+        string implementationKey = kv.Value.GetType().Name;
+
+        if (implementationKey != interfaceKey)
         {
-          bindingInterfaces.Add(new SerializableKeyPairStrings() { key = kv.Key, value = kv.Value.GetType().Name });
+          bindingInterfaces.Add(new SerializableKeyPairStrings() { key = interfaceKey, value = implementationKey });
         }
 
         var serializable = new SerializableKeyPairTransform()
         {
-          key = kv.Key,
+          key = interfaceKey,
           transform = component.transform,
         };
 
         this.bindingTransforms.Add(serializable);
 
-        // Debug.Log($"Transform binding {kv.Key} saved");
+        // Debug.Log($"Transform binding {interfaceKey} saved");
       }
       else
       {
-        Debug.LogWarning("Binding value of " + kv.Key + " couldn't be serialized.");
+        Debug.LogWarning("Binding value of " + interfaceKey + " couldn't be serialized.");
       }
     }
   }
@@ -148,9 +168,28 @@ public class InjectionManagerV2Script : MonoBehaviour, IInjectorV2Instance
 
   public T GetScript<T>() where T : MonoBehaviour
   {
+    string key = typeof(T).FullName;
     object val;
 
-    if (!objects.TryGetValue(typeof(T).FullName, out val))
+    bool hasValue = objects.TryGetValue(key, out val);
+    bool tryingToInfer = false;
+
+    if (hasValue)
+    {
+      try
+      {
+        bool isActiveAndEnabled = (val as MonoBehaviour).isActiveAndEnabled;
+      }
+      catch (MissingReferenceException)
+      {
+        Debug.LogWarning($"Null script for key {key}. Trying to infer...");
+        tryingToInfer = true;
+        hasValue = false;
+        val = null;
+      }
+    }
+
+    if (!hasValue || val == null)
     {
       T result = FindAnyObjectByType<T>(FindObjectsInactive.Exclude);
 
@@ -162,6 +201,18 @@ public class InjectionManagerV2Script : MonoBehaviour, IInjectorV2Instance
       if (result != null)
       {
         objects[typeof(T).FullName] = result;
+
+        if (tryingToInfer)
+        {
+          Debug.LogWarning($"Infer SUCCESS for key {key}.");
+        }
+      }
+      else
+      {
+        if (tryingToInfer)
+        {
+          Debug.LogWarning($"Infer FAILED for key {key}.");
+        }
       }
 
       return result;
