@@ -200,23 +200,33 @@ public class CommandsListener : MonoBehaviour
 
   private void UpdateDependenciesAfterDeleteCommands()
   {
+    int count = this.withDependencies.Count;
+
     if (this.deletedCommands.Count > 0)
     {
-      foreach (var cmd in this.withDependencies)
+      for (int i = 0; i < count; i++)
       {
+        var cmd = this.withDependencies[i];
+
         foreach (var deletedId in this.deletedCommands)
         {
           cmd.RemoveDependency(deletedId);
         }
       }
     }
-    else if (this.withDependencies.Count > 0)
+    else if (count > 0)
     {
-      foreach (var cmd in this.withDependencies)
+      for (int i = 0; i < count; i++)
       {
-        cmd.Dependencies.RemoveAll(m => !this.HasCommand(m));
+        var cmd = this.withDependencies[i];
+        this.UpdateDependenciesList(cmd);
       }
     }
+  }
+
+  private void UpdateDependenciesList(BaseCommand cmd)
+  {
+    cmd.Dependencies.RemoveAll(m => !this.HasCommand(m));
   }
 
   private BaseCommand PickAndEnableNextCommand()
