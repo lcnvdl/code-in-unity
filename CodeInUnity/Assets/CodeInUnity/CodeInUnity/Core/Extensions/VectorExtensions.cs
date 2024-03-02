@@ -29,6 +29,16 @@ namespace CodeInUnity.Extensions
       return new Vector3(a.x * b.x, a.y * b.y, a.z * b.z);
     }
 
+    public static Vector2 Round(this Vector2 a)
+    {
+      return new Vector2(Mathf.Round(a.x), Mathf.Round(a.y));
+    }
+
+    public static Vector2Int RoundToInt(this Vector2 a)
+    {
+      return new Vector2Int(Mathf.RoundToInt(a.x), Mathf.RoundToInt(a.y));
+    }
+
     public static Vector3 Round(this Vector3 a)
     {
       return new Vector3(Mathf.Round(a.x), Mathf.Round(a.y), Mathf.Round(a.z));
