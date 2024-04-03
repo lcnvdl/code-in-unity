@@ -17,11 +17,7 @@ namespace CodeInUnity.Scripts.Managers
       {
         if (instance == null && !applicationIsQuitting)
         {
-#if UNITY_2019
-                    instance = FindObjectOfType<SlowUpdateManager>();
-#else
           instance = FindAnyObjectByType<SlowUpdateManager>();
-#endif
 
           if (instance == null)
           {

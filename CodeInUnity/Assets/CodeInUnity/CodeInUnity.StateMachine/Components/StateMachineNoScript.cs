@@ -1,6 +1,5 @@
 using System;
 using CodeInUnity.StateMachine;
-using CodeInUnity.StateMachine.Interfaces;
 using UnityEngine;
 
 [Serializable]

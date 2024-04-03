@@ -31,7 +31,7 @@ public class InjectionManagerV2Script : MonoBehaviour, IInjectorV2Instance
     {
       if (instance == null)
       {
-        instance = FindObjectOfType<InjectionManagerV2Script>();
+        instance = FindAnyObjectByType<InjectionManagerV2Script>();
 
         if (instance == null)
         {
@@ -136,6 +136,26 @@ public class InjectionManagerV2Script : MonoBehaviour, IInjectorV2Instance
         Debug.LogWarning("Binding value of " + interfaceKey + " couldn't be serialized.");
       }
     }
+  }
+
+  public T[] GetEmptyArray<T>()
+  {
+    string key = $"$array_{typeof(T).FullName}";
+
+    return this.GetEmptyArray<T>(key);
+  }
+
+  public T[] GetEmptyArray<T>(string key)
+  {
+    object val;
+
+    if (!objects.TryGetValue(key, out val))
+    {
+      val = new T[0];
+      objects[key] = val;
+    }
+
+    return (T[])val;
   }
 
   public void BindMany(object instance, Type[] types)

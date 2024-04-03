@@ -23,7 +23,7 @@ public class InjectionManagerScript : MonoBehaviour, IInjectorInstance
 
         if (!objects.TryGetValue(typeof(X).FullName, out val))
         {
-            T result = FindObjectOfType<T>();
+            T result = FindAnyObjectByType<T>();
 
             if (result != null)
             {
@@ -43,7 +43,7 @@ public class InjectionManagerScript : MonoBehaviour, IInjectorInstance
 
         if (!objects.TryGetValue(typeof(T).FullName, out val))
         {
-            T result = FindObjectOfType<T>();
+            T result = FindAnyObjectByType<T>();
 
             if (result != null)
             {

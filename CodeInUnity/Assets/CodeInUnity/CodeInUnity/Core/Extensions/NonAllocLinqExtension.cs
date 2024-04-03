@@ -48,6 +48,20 @@ namespace System.Linq
             QuickSortArray(items, compare, 0, items.Count - 1);
         }
 
+    public static bool ContainsNA<T>(this List<T> self, T value)
+    {
+      int count = self.Count;
+      for (int i = 0; i < count; ++i)
+      {
+        if (SafeEquals(self[i], value))
+        {
+          return true;
+        }
+      }
+
+      return false;
+    }
+
         public static void SortNA<T>(this List<T> items, Func<T, T, int> compare)
         {
             int n = items.Count;
@@ -75,6 +89,35 @@ namespace System.Linq
         {
             return self.Length > 0;
         }
+
+    public static bool ContainsNA<T>(this T[] self, T value)
+    {
+      int count = self.Length;
+      for (int i = 0; i < count; ++i)
+      {
+        if (SafeEquals(self[i], value))
+        {
+          return true;
+        }
+      }
+
+      return false;
+    }
+
+    private static bool SafeEquals(object a, object b)
+    {
+      if (a != null)
+      {
+        return a.Equals(b);
+      }
+
+      if (b != null)
+      {
+        return b.Equals(a);
+      }
+
+      return a == b;
+    }
 
         private static void QuickSortArray<T>(this List<T> array, Func<T, T, int> compare, int leftIndex, int rightIndex)
         {

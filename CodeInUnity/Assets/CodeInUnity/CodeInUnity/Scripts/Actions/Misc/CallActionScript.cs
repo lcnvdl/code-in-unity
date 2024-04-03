@@ -6,7 +6,7 @@
 
     protected override void Run()
     {
-      var action = (ActionScript)FindObjectOfType(targetAction.GetType());
+      var action = (ActionScript)FindFirstObjectByType(targetAction.GetType());
       action.ExecuteAction();
     }
   }
