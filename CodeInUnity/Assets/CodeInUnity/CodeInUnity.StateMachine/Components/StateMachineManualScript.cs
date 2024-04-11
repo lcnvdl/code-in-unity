@@ -1,9 +1,10 @@
-using CodeInUnity.StateMachine;
 using CodeInUnity.StateMachine.Interfaces;
 using UnityEngine;
 
-public class StateMachineManualScript : MonoBehaviour
+namespace CodeInUnity.StateMachine.Components
 {
+  public class StateMachineManualScript : MonoBehaviour
+  {
     [SerializeReference]
     [HideInInspector]
     public StatesManagerBase machine;
@@ -16,31 +17,32 @@ public class StateMachineManualScript : MonoBehaviour
 
     protected virtual void Start()
     {
-        this.machine = this.GenerateNewMachine();
-        this.machine.target = gameObject;
-        this.machine.statesRepositoryReference = this.statesRepositoryReference;
-        this.machine.initialState = initialState;
-        this.machine.Initialize();
+      this.machine = this.GenerateNewMachine();
+      this.machine.target = gameObject;
+      this.machine.statesRepositoryReference = this.statesRepositoryReference;
+      this.machine.initialState = initialState;
+      this.machine.Initialize();
     }
 
     public void SetTrigger(string name)
     {
-        this.machine.Trigger(name);
+      this.machine.Trigger(name);
     }
 
     public void SetValue(string name, float value)
     {
-        this.machine.variables[name] = value;
+      this.machine.variables[name] = value;
     }
 
     protected virtual StatesManagerBase GenerateNewMachine()
     {
-        if (this.TryGetComponent(out IStatesManagerFactory states))
-        {
-            return states.CreateNewStatesManager();
-        }
+      if (this.TryGetComponent(out IStatesManagerFactory states))
+      {
+        return states.CreateNewStatesManager();
+      }
 
-        var machine = new StatesManagerBase();
-        return machine;
+      var machine = new StatesManagerBase();
+      return machine;
     }
+  }
 }

@@ -3,7 +3,7 @@ using CodeInUnity.Commands;
 using CodeInUnity.Core.Utils;
 using UnityEngine;
 
-namespace CodeInUnity.Command
+namespace CodeInUnity.CommandsProcessor
 {
     public class CommandsFactory
     {

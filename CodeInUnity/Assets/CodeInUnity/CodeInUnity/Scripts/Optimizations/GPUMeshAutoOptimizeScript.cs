@@ -6,7 +6,7 @@ namespace CodeInUnity.Scripts.Optimizations
 {
   public class GPUMeshAutoOptimizeScript : MonoBehaviour
   {
-    public Mesh mesh;
+    public UnityEngine.Mesh mesh;
 
     public Material[] materials;
 

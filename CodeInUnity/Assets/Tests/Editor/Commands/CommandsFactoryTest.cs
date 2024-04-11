@@ -1,6 +1,6 @@
 using NUnit.Framework;
 using UnityEngine;
-using CodeInUnity.Command;
+using CodeInUnity.CommandsProcessor;
 using CodeInUnity.Commands;
 
 public class CommandsFactoryTest

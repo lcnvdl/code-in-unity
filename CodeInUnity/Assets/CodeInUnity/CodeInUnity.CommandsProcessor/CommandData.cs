@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CodeInUnity.Command
+namespace CodeInUnity.CommandsProcessor
 {
     [Serializable]
     public class CommandData

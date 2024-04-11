@@ -1,9 +1,10 @@
 using CodeInUnity.Core.Enums;
 using UnityEngine;
 
-
-public class OcclusionToggler : MonoBehaviour
+namespace CodeInUnity.Scripts.Mesh
 {
+  public class OcclusionToggler : MonoBehaviour
+  {
     public OcclusionStatus status;
 
     public bool selfApply = true;
@@ -12,20 +13,21 @@ public class OcclusionToggler : MonoBehaviour
 
     void Start()
     {
-        if (this.selfApply)
+      if (this.selfApply)
+      {
+        if (TryGetComponent<MeshRenderer>(out var mesh))
         {
-            if (TryGetComponent<MeshRenderer>(out var mesh))
-            {
-                mesh.allowOcclusionWhenDynamic = (status == OcclusionStatus.Enabled);
-            }
+          mesh.allowOcclusionWhenDynamic = (status == OcclusionStatus.Enabled);
         }
+      }
 
-        if (this.recursive)
+      if (this.recursive)
+      {
+        foreach (var mesh in GetComponentsInChildren<MeshRenderer>())
         {
-            foreach (var mesh in GetComponentsInChildren<MeshRenderer>())
-            {
-                mesh.allowOcclusionWhenDynamic = (status == OcclusionStatus.Enabled);
-            }
+          mesh.allowOcclusionWhenDynamic = (status == OcclusionStatus.Enabled);
         }
+      }
     }
+  }
 }

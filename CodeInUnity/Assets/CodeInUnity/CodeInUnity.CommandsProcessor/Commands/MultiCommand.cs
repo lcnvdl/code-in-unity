@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using CodeInUnity.Command;
+using CodeInUnity.CommandsProcessor;
 using CodeInUnity.Core.Utils;
 using UnityEngine;
 

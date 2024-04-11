@@ -1,8 +1,10 @@
 using CodeInUnity.Core.Events;
 using UnityEngine;
 
-public class PauseManager : MonoBehaviour
+namespace CodeInUnity.Scripts.Managers
 {
+  public class PauseManager : MonoBehaviour
+  {
     public static PauseManager Instance { get; private set; }
 
     public BoolUnityEvent pauseChanged;
@@ -11,18 +13,19 @@ public class PauseManager : MonoBehaviour
 
     private void Start()
     {
-        Instance = this;
+      Instance = this;
     }
 
     public void Pause()
     {
-        pauseChanged.Invoke(true);
-        Time.timeScale = 0;
+      pauseChanged.Invoke(true);
+      Time.timeScale = 0;
     }
 
     public void Unpause()
     {
-        pauseChanged.Invoke(false);
-        Time.timeScale = 1;
+      pauseChanged.Invoke(false);
+      Time.timeScale = 1;
     }
+  }
 }

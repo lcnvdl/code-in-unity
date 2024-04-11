@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace CodeInUnity.Command
+namespace CodeInUnity.CommandsProcessor
 {
   public enum CommandStatus
   {

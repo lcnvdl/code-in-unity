@@ -1,9 +1,12 @@
 using UnityEngine;
 
-public class SetNotActiveScript : MonoBehaviour
+namespace CodeInUnity.Scripts.GameObjects
 {
-  public void SetNotActive(bool value)
+  public class SetNotActiveScript : MonoBehaviour
   {
-    gameObject.SetActive(!value);
+    public void SetNotActive(bool value)
+    {
+      gameObject.SetActive(!value);
+    }
   }
 }

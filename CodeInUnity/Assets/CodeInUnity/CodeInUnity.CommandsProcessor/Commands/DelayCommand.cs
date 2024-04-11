@@ -1,6 +1,6 @@
 ﻿using System;
 using UnityEngine;
-using CodeInUnity.Command;
+using CodeInUnity.CommandsProcessor;
 
 namespace CodeInUnity.Commands
 {

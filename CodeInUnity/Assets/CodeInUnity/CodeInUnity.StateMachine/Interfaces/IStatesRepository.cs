@@ -1,13 +1,14 @@
-using CodeInUnity.StateMachine;
-
-public interface IStatesRepository
+namespace CodeInUnity.StateMachine.Interfaces
 {
+  public interface IStatesRepository
+  {
     AnyState GetRootState();
 
     BaseState GetState(string id);
-}
+  }
 
-public interface IWriteableStatesRepository
-{
+  public interface IWriteableStatesRepository
+  {
     void OverrideState(BaseState state);
+  }
 }

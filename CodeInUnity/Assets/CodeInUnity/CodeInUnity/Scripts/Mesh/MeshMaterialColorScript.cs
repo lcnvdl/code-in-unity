@@ -1,43 +1,45 @@
 ﻿using UnityEngine;
 
-public class MeshMaterialColorScript : MonoBehaviour
+namespace CodeInUnity.Scripts.Mesh
 {
-  public GameObject[] objects;
-
-  public Color customColor = Color.black;
-
-  public string colorName = "_BaseColor";
-
-  private Color lastColor = Color.black;
-
-  void Start()
+  public class MeshMaterialColorScript : MonoBehaviour
   {
-    this.ApplyColor();
-  }
+    public GameObject[] objects;
 
-  void Update()
-  {
-    if (lastColor != customColor)
+    public Color customColor = Color.black;
+
+    public string colorName = "_BaseColor";
+
+    private Color lastColor = Color.black;
+
+    void Start()
     {
       this.ApplyColor();
     }
-  }
 
-  private void ApplyColor()
-  {
-    foreach (var eye in objects)
+    void Update()
     {
-      this.SetColor(eye);
+      if (lastColor != customColor)
+      {
+        this.ApplyColor();
+      }
     }
 
-    lastColor = customColor;
-  }
+    private void ApplyColor()
+    {
+      foreach (var target in objects)
+      {
+        this.SetColor(target);
+      }
 
-  private void SetColor(GameObject eye)
-  {
-    // Get the Renderer component from the new cube
-    var cubeRenderer = eye.GetComponent<Renderer>();
+      lastColor = customColor;
+    }
 
-    cubeRenderer.material.SetColor(colorName, customColor);
+    private void SetColor(GameObject target)
+    {
+      var renderer = target.GetComponent<Renderer>();
+
+      renderer.material.SetColor(colorName, customColor);
+    }
   }
 }

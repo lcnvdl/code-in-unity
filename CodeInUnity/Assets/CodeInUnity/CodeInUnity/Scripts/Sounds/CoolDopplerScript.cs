@@ -1,7 +1,9 @@
 using UnityEngine;
 
-public class CoolDopplerScript : MonoBehaviour
+namespace CodeInUnity.Scripts.Sounds
 {
+  public class CoolDopplerScript : MonoBehaviour
+  {
     public AudioListener listener;
 
     public AudioHighPassFilter source;
@@ -14,11 +16,12 @@ public class CoolDopplerScript : MonoBehaviour
 
     void Update()
     {
-        float distance = Vector3.Distance(listener.transform.position, source.transform.position);
-        
-        if (distance > minDistance)
-        {
-            source.cutoffFrequency = maxDisort * Mathf.Min(maxDistance, (distance - minDistance)) / maxDistance;
-        }
+      float distance = Vector3.Distance(listener.transform.position, source.transform.position);
+
+      if (distance > minDistance)
+      {
+        source.cutoffFrequency = maxDisort * Mathf.Min(maxDistance, (distance - minDistance)) / maxDistance;
+      }
     }
+  }
 }

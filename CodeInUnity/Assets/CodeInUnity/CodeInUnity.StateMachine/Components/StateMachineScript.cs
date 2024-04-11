@@ -1,11 +1,12 @@
-using CodeInUnity.StateMachine;
-using CodeInUnity.StateMachine.Interfaces;
 using UnityEngine;
 
-public class StateMachineScript : StateMachineManualScript
+namespace CodeInUnity.StateMachine.Components
 {
+  public class StateMachineScript : StateMachineManualScript
+  {
     protected virtual void Update()
     {
-        machine.Update(Time.deltaTime);
+      machine.Update(Time.deltaTime);
     }
+  }
 }

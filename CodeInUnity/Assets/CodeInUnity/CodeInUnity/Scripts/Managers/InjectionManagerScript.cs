@@ -2,84 +2,88 @@
 using CodeInUnity.Core.System;
 using UnityEngine;
 
-public class InjectionManagerScript : MonoBehaviour, IInjectorInstance
+
+namespace CodeInUnity.Scripts.Managers
 {
+  public class InjectionManagerScript : MonoBehaviour, IInjectorInstance
+  {
     [HideInInspector]
     public Dictionary<string, object> objects = new Dictionary<string, object>();
 
     public T LazyInitialize<T>(ref T value) where T : MonoBehaviour
     {
-        if (value == null)
-        {
-            value = this.GetScriptInstance<T>();
-        }
+      if (value == null)
+      {
+        value = this.GetScriptInstance<T>();
+      }
 
-        return value;
+      return value;
     }
 
     public X GetScriptInstance<X, T>() where T : MonoBehaviour
     {
-        object val;
+      object val;
 
-        if (!objects.TryGetValue(typeof(X).FullName, out val))
+      if (!objects.TryGetValue(typeof(X).FullName, out val))
+      {
+        T result = FindAnyObjectByType<T>();
+
+        if (result != null)
         {
-            T result = FindAnyObjectByType<T>();
-
-            if (result != null)
-            {
-                objects[typeof(T).FullName] = result;
-                objects[typeof(X).FullName] = result;
-            }
-
-            return (X)(object)result;
+          objects[typeof(T).FullName] = result;
+          objects[typeof(X).FullName] = result;
         }
 
-        return (X)val;
+        return (X)(object)result;
+      }
+
+      return (X)val;
     }
 
     public T GetScriptInstance<T>() where T : MonoBehaviour
     {
-        object val;
+      object val;
 
-        if (!objects.TryGetValue(typeof(T).FullName, out val))
+      if (!objects.TryGetValue(typeof(T).FullName, out val))
+      {
+        T result = FindAnyObjectByType<T>();
+
+        if (result != null)
         {
-            T result = FindAnyObjectByType<T>();
-
-            if (result != null)
-            {
-                objects[typeof(T).FullName] = result;
-            }
-
-            return result;
+          objects[typeof(T).FullName] = result;
         }
 
-        return (T)val;
+        return result;
+      }
+
+      return (T)val;
     }
 
     public void SetScriptInstance<T>(T instance) where T : MonoBehaviour
     {
-        objects[instance.GetType().FullName] = instance;
+      objects[instance.GetType().FullName] = instance;
     }
 
     public T GetInstance<T>()
     {
-        object val;
+      object val;
 
-        if (!objects.TryGetValue(typeof(T).FullName, out val))
-        {
-            return default(T);
-        }
+      if (!objects.TryGetValue(typeof(T).FullName, out val))
+      {
+        return default(T);
+      }
 
-        return (T)val;
+      return (T)val;
     }
 
     public void SetInstance<T>(T instance)
     {
-        objects[instance.GetType().FullName] = instance;
+      objects[instance.GetType().FullName] = instance;
     }
 
     public void Clear()
     {
-        objects.Clear();
+      objects.Clear();
     }
+  }
 }

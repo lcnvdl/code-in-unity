@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using CodeInUnity.Core.Collections;
+using CodeInUnity.StateMachine.Interfaces;
 using UnityEngine;
 
 namespace CodeInUnity.StateMachine

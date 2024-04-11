@@ -1,29 +1,31 @@
 using System;
-using CodeInUnity.StateMachine;
 using UnityEngine;
 
-[Serializable]
-public abstract class StateMachineNoScript
+namespace CodeInUnity.StateMachine.Components
 {
-  [SerializeReference]
-  [HideInInspector]
-  public StatesManagerBase machine;
-
-  public void Initialize()
+  [Serializable]
+  public abstract class StateMachineNoScript
   {
-    this.machine = this.GenerateNewMachine();
-    this.machine.Initialize();
-  }
+    [SerializeReference]
+    [HideInInspector]
+    public StatesManagerBase machine;
 
-  public void SetTrigger(string name)
-  {
-    this.machine.Trigger(name);
-  }
+    public void Initialize()
+    {
+      this.machine = this.GenerateNewMachine();
+      this.machine.Initialize();
+    }
 
-  public void SetValue(string name, float value)
-  {
-    this.machine.variables[name] = value;
-  }
+    public void SetTrigger(string name)
+    {
+      this.machine.Trigger(name);
+    }
 
-  protected abstract StatesManagerBase GenerateNewMachine();
+    public void SetValue(string name, float value)
+    {
+      this.machine.variables[name] = value;
+    }
+
+    protected abstract StatesManagerBase GenerateNewMachine();
+  }
 }
