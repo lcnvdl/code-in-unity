@@ -70,5 +70,10 @@ namespace CodeInUnity.Core.Utils
 
       return (offsetValue - ((offsetValue / width) * width)) + start;
     }
+
+    public static bool IsSimilar(float a, float b, float delta = float.Epsilon)
+    {
+      return Mathf.Abs(a - b) <= delta;
+    }
   }
 }

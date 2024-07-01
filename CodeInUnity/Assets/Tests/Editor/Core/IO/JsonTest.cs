@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
-using CodeInUnity.Core.Utils;
+using CodeInUnity.Core.IO;
 using NUnit.Framework;
-using UnityEngine;
 
 namespace Tests
 {
-    public class JsonTest
+  public class JsonTest
     {
         [Test]
         public void Deserialize()

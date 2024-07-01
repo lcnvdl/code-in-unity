@@ -2,11 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using CodeInUnity.Core.Collections;
+using CodeInUnity.StateMachine.Interfaces;
 
 namespace CodeInUnity.StateMachine
 {
   [Serializable]
-  public class StateTransition
+  public class StateTransition : ITransitionState
   {
     private static readonly string[] ops = new string[] { "==", "<", ">", "<=", ">=", "!=" };
 

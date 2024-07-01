@@ -14,6 +14,8 @@ namespace CodeInUnity.StateMachine
         //  Sirve para que cambie cuando una transición está en true.
         protected bool isTaskFinished = false;
 
+        public bool IsTaskFinished => this.isTaskFinished;
+
         public BaseState()
         {
             this.identifier = this.Identifier;

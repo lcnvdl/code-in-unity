@@ -1,0 +1,54 @@
+﻿using CodeInUnity.Core.IO;
+using NUnit.Framework;
+
+namespace Tests
+{
+  public class CsvTest
+  {
+    [Test]
+    public void CsvStreamReader_ReadToEnd_ShouldWorkFine_ForEmptyCSV()
+    {
+      var csvString = "";
+
+      using (var reader = new CsvStreamReader(csvString))
+      {
+        var result = reader.ReadToEnd();
+        Assert.NotNull(result);
+        Assert.AreEqual(1, result.Count);
+        Assert.AreEqual("", result[0].content);
+        Assert.AreEqual(0, result[0].column);
+        Assert.AreEqual(0, result[0].row);
+      }
+    }
+
+    [Test]
+    public void CsvStreamReader_ReadToEnd_ShouldWorkFine_ForEmptyCellsSingleRow()
+    {
+      var csvString = ";;;;";
+
+      using (var reader = new CsvStreamReader(csvString))
+      {
+        var result = reader.ReadToEnd();
+        Assert.NotNull(result);
+        Assert.AreEqual(5, result.Count);
+        Assert.AreEqual(1, reader.RowsCount);
+        Assert.AreEqual(5, reader.ColumnsCount);
+      }
+    }
+
+    [Test]
+    public void CsvStreamReader_ReadToEnd_ShouldWorkFine_ForEmptyCells()
+    {
+      var csvString = ";;;;\n;;;;";
+
+      using (var reader = new CsvStreamReader(csvString))
+      {
+        var result = reader.ReadToEnd();
+        Assert.NotNull(result);
+        Assert.AreEqual(10, result.Count);
+        Assert.AreEqual(2, reader.RowsCount);
+        Assert.AreEqual(5, reader.ColumnsCount);
+      }
+    }
+  }
+}
