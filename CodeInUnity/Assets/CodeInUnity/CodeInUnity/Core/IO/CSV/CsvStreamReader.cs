@@ -167,12 +167,22 @@ namespace CodeInUnity.Core.IO
 
         this.sb.Append(firstCharacter);
 
+        bool stringDelimiterOpen = false;
+
         while (this.cache.Count > 0 && this.cache[0] != this.settings.cellDelimiter)
         {
           char character = this.cache[0];
           this.cache.RemoveAt(0);
 
-          this.sb.Append(character);
+          if (!stringDelimiterOpen && character == '\n')
+          {
+            //  End of line
+            break;
+          }
+          else
+          {
+            this.sb.Append(character);
+          }
         }
 
         if (this.cache.Count > 0 && this.cache[0] == this.settings.cellDelimiter)
@@ -181,6 +191,11 @@ namespace CodeInUnity.Core.IO
         }
 
         this.currentColumn++;
+
+        if (this.cache.Count == 0)
+        {
+          this.currentRow++;
+        }
 
         return new CsvCell(this.currentColumn, this.currentRow, isHeader, this.sb.ToString());
       }

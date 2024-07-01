@@ -26,6 +26,7 @@ namespace CodeInUnity.Core.IO.CSV
       this.column = column;
       this.row = row;
       this.content = content;
+      this.isHeader = isHeader;
     }
   }
 }
