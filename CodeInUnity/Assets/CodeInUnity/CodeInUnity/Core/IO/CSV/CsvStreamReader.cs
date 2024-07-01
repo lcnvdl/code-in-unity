@@ -10,6 +10,13 @@ namespace CodeInUnity.Core.IO
 {
   public class CsvStreamReader : IDisposable
   {
+    enum DelimiterStatus
+    {
+      None = 0,
+      Open = 1,
+      Closed = 2,
+    }
+
     private Stream stream;
     private StreamReader streamReader;
 
@@ -165,38 +172,38 @@ namespace CodeInUnity.Core.IO
       {
         this.sb.Clear();
 
-        bool stringDelimiterOpen = false;
-        bool stringDelimiterClosed = false;
-        bool invertedBarOpen = false;
+        DelimiterStatus stringDelimiterStatus = DelimiterStatus.None;
 
         this.cache.Insert(0, firstCharacter);
-        //this.sb.Append(firstCharacter);
 
         int currentCharacterIndex = 0;
+
+        char previousCharacter = '-';
 
         while (this.cache.Count > 0 && this.cache[0] != this.settings.cellDelimiter)
         {
           char character = this.cache[0];
           this.cache.RemoveAt(0);
 
-          if ((!stringDelimiterOpen || stringDelimiterClosed) && character == '\n')
+          if ((stringDelimiterStatus == DelimiterStatus.None || stringDelimiterStatus == DelimiterStatus.Closed) && character == '\n')
           {
             //  End of line
             break;
           }
-          else if (!invertedBarOpen && character == '\\')
+          else if (character == this.settings.stringDelimiter)
           {
-            this.sb.Append(character);
-          }
-          else if (!invertedBarOpen && character == this.settings.stringDelimiter)
-          {
-            if (!stringDelimiterOpen)
+            if (stringDelimiterStatus == DelimiterStatus.None)
             {
-              stringDelimiterOpen = true;
+              stringDelimiterStatus = DelimiterStatus.Open;
             }
-            else if (!stringDelimiterClosed)
+            else if (stringDelimiterStatus == DelimiterStatus.Open)
             {
-              stringDelimiterClosed = true;
+              stringDelimiterStatus = DelimiterStatus.Closed;
+            }
+            else if (previousCharacter == this.settings.stringDelimiter)
+            {
+              stringDelimiterStatus = DelimiterStatus.Open;
+              this.sb.Append(character);
             }
             else
             {
@@ -206,13 +213,12 @@ namespace CodeInUnity.Core.IO
           else
           {
             this.sb.Append(character);
-
-            invertedBarOpen = false;
           }
 
           currentCharacterIndex++;
+          previousCharacter = character;
 
-          if (this.cache.Count == 0 && !this.streamReader.EndOfStream && stringDelimiterOpen && !stringDelimiterClosed)
+          if (this.cache.Count == 0 && !this.streamReader.EndOfStream && stringDelimiterStatus == DelimiterStatus.Open)
           {
             string currentLine = this.streamReader.ReadLine();
 
@@ -241,14 +247,9 @@ namespace CodeInUnity.Core.IO
           this.currentColumn++;
         }
 
-        if (stringDelimiterOpen && !stringDelimiterClosed)
+        if (stringDelimiterStatus == DelimiterStatus.Open)
         {
           throw new InvalidDataException($"A character {this.settings.stringDelimiter} is missing.");
-        }
-
-        if (invertedBarOpen)
-        {
-          throw new InvalidDataException($"A character is missing after the \"\\\".");
         }
 
         return cell;
@@ -271,7 +272,7 @@ namespace CodeInUnity.Core.IO
         this.stream = null;
       }
 
-      //this.endOfStream = false;
+      this.hasEnded = true;
     }
   }
 }

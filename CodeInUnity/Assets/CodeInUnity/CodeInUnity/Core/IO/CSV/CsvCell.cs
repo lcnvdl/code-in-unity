@@ -28,5 +28,10 @@ namespace CodeInUnity.Core.IO.CSV
       this.content = content;
       this.isHeader = isHeader;
     }
+
+    public override string ToString()
+    {
+      return $"{(isHeader ? "*" : "")}{{{column}, {row}}} = {content}";
+    }
   }
 }

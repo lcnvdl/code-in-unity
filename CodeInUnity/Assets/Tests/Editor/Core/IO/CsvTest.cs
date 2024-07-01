@@ -22,6 +22,38 @@ namespace Tests
     }
 
     [Test]
+    public void CsvStreamReader_ReadToEnd_ShouldWorkFine_ForInvertedBar()
+    {
+      var csvString = "\\";
+
+      using (var reader = new CsvStreamReader(csvString))
+      {
+        var result = reader.ReadToEnd();
+        Assert.NotNull(result);
+        Assert.AreEqual(1, result.Count);
+        Assert.AreEqual("\\", result[0].content);
+        Assert.AreEqual(0, result[0].column);
+        Assert.AreEqual(0, result[0].row);
+      }
+    }
+
+    [Test]
+    public void CsvStreamReader_ReadToEnd_ShouldWorkFine_ForInvertedVarInSingleRow()
+    {
+      var csvString = ";\\Hola\\;;;";
+
+      using (var reader = new CsvStreamReader(csvString))
+      {
+        var result = reader.ReadToEnd();
+        Assert.NotNull(result);
+        Assert.AreEqual(5, result.Count);
+        Assert.AreEqual(1, reader.RowsCount);
+        Assert.AreEqual(5, reader.ColumnsCount);
+        Assert.AreEqual("\\Hola\\", result[1].content);
+      }
+    }
+
+    [Test]
     public void CsvStreamReader_ReadToEnd_ShouldWorkFine_ForEmptyCellsSingleRow()
     {
       var csvString = ";;;;";
