@@ -165,23 +165,62 @@ namespace CodeInUnity.Core.IO
       {
         this.sb.Clear();
 
-        this.sb.Append(firstCharacter);
-
         bool stringDelimiterOpen = false;
+        bool stringDelimiterClosed = false;
+        bool invertedBarOpen = false;
+
+        this.cache.Insert(0, firstCharacter);
+        //this.sb.Append(firstCharacter);
+
+        int currentCharacterIndex = 0;
 
         while (this.cache.Count > 0 && this.cache[0] != this.settings.cellDelimiter)
         {
           char character = this.cache[0];
           this.cache.RemoveAt(0);
 
-          if (!stringDelimiterOpen && character == '\n')
+          if ((!stringDelimiterOpen || stringDelimiterClosed) && character == '\n')
           {
             //  End of line
             break;
           }
+          else if (!invertedBarOpen && character == '\\')
+          {
+            this.sb.Append(character);
+          }
+          else if (!invertedBarOpen && character == this.settings.stringDelimiter)
+          {
+            if (!stringDelimiterOpen)
+            {
+              stringDelimiterOpen = true;
+            }
+            else if (!stringDelimiterClosed)
+            {
+              stringDelimiterClosed = true;
+            }
+            else
+            {
+              throw new InvalidDataException($"Unexpected character {character}.");
+            }
+          }
           else
           {
             this.sb.Append(character);
+
+            invertedBarOpen = false;
+          }
+
+          currentCharacterIndex++;
+
+          if (this.cache.Count == 0 && !this.streamReader.EndOfStream && stringDelimiterOpen && !stringDelimiterClosed)
+          {
+            string currentLine = this.streamReader.ReadLine();
+
+            if (!string.IsNullOrEmpty(currentLine))
+            {
+              this.cache.AddRange(currentLine.TrimStart().ToCharArray());
+              this.cache.Add('\n');
+            }
           }
         }
 
@@ -190,14 +229,29 @@ namespace CodeInUnity.Core.IO
           this.cache.RemoveAt(0);
         }
 
-        this.currentColumn++;
+        var cell = new CsvCell(this.currentColumn, this.currentRow, isHeader, this.sb.ToString());
 
         if (this.cache.Count == 0)
         {
           this.currentRow++;
+          this.currentColumn = 0;
+        }
+        else
+        {
+          this.currentColumn++;
         }
 
-        return new CsvCell(this.currentColumn, this.currentRow, isHeader, this.sb.ToString());
+        if (stringDelimiterOpen && !stringDelimiterClosed)
+        {
+          throw new InvalidDataException($"A character {this.settings.stringDelimiter} is missing.");
+        }
+
+        if (invertedBarOpen)
+        {
+          throw new InvalidDataException($"A character is missing after the \"\\\".");
+        }
+
+        return cell;
       }
 
       throw new NotImplementedException();
