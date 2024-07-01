@@ -27,6 +27,8 @@ namespace CodeInUnity.Core.IO
 
     private bool hasEnded = false;
 
+    private StringBuilder sb = new StringBuilder();
+
     public CsvStreamSettings settings = CsvStreamSettings.Default;
 
     public bool EndOfStream => this.streamReader.EndOfStream && this.cache.Count == 0 && this.hasEnded;
@@ -157,6 +159,30 @@ namespace CodeInUnity.Core.IO
       else if (this.currentColumn == 0 && firstCharacter == '\n')
       {
         return new CsvCell(this.currentColumn, this.currentRow, isHeader);
+      }
+      //  Normal cell
+      else
+      {
+        this.sb.Clear();
+
+        this.sb.Append(firstCharacter);
+
+        while (this.cache.Count > 0 && this.cache[0] != this.settings.cellDelimiter)
+        {
+          char character = this.cache[0];
+          this.cache.RemoveAt(0);
+
+          this.sb.Append(character);
+        }
+
+        if (this.cache.Count > 0 && this.cache[0] == this.settings.cellDelimiter)
+        {
+          this.cache.RemoveAt(0);
+        }
+
+        this.currentColumn++;
+
+        return new CsvCell(this.currentColumn, this.currentRow, isHeader, this.sb.ToString());
       }
 
       throw new NotImplementedException();
