@@ -39,5 +39,20 @@
 
             return (bp == bLen);
         }
+
+    public static string Capitalize(string word, bool tailToLowerCase)
+    {
+      if (word == null || word.Length == 0)
+      {
+        return word;
+      }
+
+      if (word.Length == 1)
+      {
+        return word.ToUpper();
+      }
+
+      return word.Remove(1).ToUpper() + (tailToLowerCase ? word.Substring(1).ToLower() : word.Substring(1));
+    }
     }
 }

@@ -202,13 +202,20 @@ namespace CodeInUnity.Scripts.Managers
         {
           bool isActiveAndEnabled = (val as MonoBehaviour).isActiveAndEnabled;
         }
-        catch (MissingReferenceException)
+      catch (Exception ex)
+      {
+        if ((ex is NullReferenceException) || (ex is MissingReferenceException))
         {
           Debug.LogWarning($"Null script for key {key}. Trying to infer...");
           tryingToInfer = true;
           hasValue = false;
           val = null;
         }
+        else
+        {
+          throw;
+        }
+      }
       }
 
       if (!hasValue || val == null)
@@ -269,6 +276,18 @@ namespace CodeInUnity.Scripts.Managers
 
       return value;
     }
+
+  public T LazyInitializeAnyOrScript<T, TScript>(ref T value) where TScript : MonoBehaviour, T
+  {
+    LazyInitializeAny(ref value);
+
+    if (value == null)
+    {
+      return FindAnyObjectByType<TScript>(FindObjectsInactive.Exclude);
+    }
+
+    return value;
+  }
 
     public void Clear()
     {

@@ -25,6 +25,16 @@ namespace CodeInUnity.Core.Utils
       return numbers.Sum() / numbers.Length;
     }
 
+    public static int Mod(int x, int m)
+    {
+      return (x % m + m) % m;
+    }
+
+    public static float Mod(float x, float m)
+    {
+      return x - m * Mathf.Floor(x / m);
+    }
+
     public static float NormalizeAngle180(float angle)
     {
       while (angle > 180)

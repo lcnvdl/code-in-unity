@@ -227,7 +227,15 @@ namespace CodeInUnity.CommandsProcessor
 
     private void UpdateDependenciesList(BaseCommand cmd)
     {
-      cmd.Dependencies.RemoveAll(m => !this.HasCommand(m));
+      for (int i = cmd.Dependencies.Count - 1; i >= 0; i--)
+      {
+        string m = cmd.Dependencies[i];
+
+        if (!this.HasCommand(m))
+        {
+          cmd.Dependencies.RemoveAt(i);
+        }
+      }
     }
 
     private BaseCommand PickAndEnableNextCommand()
