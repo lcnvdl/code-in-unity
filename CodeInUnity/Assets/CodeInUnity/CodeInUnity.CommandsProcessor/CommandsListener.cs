@@ -308,7 +308,14 @@ namespace CodeInUnity.CommandsProcessor
         {
           if (cmd.Status == CommandStatus.NotStarted)
           {
-            cmd.Start(gameObject);
+            if (cmd.asyncDelayBeforeStart > 0)
+            {
+              cmd.asyncDelayBeforeStart -= dt;
+            }
+            else
+            {
+              cmd.Start(gameObject);
+            }
           }
 
           if (cmd.Status == CommandStatus.Running)

@@ -23,6 +23,12 @@ namespace CodeInUnity.StateMachine
     {
     }
 
+    public StateTransition(string toState)
+    {
+      this.toState = toState;
+      this.query = string.Empty;
+    }
+
     public StateTransition(string toState, string query)
     {
       this.toState = toState;
@@ -37,12 +43,18 @@ namespace CodeInUnity.StateMachine
 
         foreach (string trigger in triggers)
         {
-          parsedQuery = parsedQuery.Replace(trigger, "1");
+          if (parsedQuery.Contains(trigger))
+          {
+            parsedQuery = parsedQuery.Replace(trigger, "1");
+          }
         }
 
         foreach (var kv in variables)
         {
-          parsedQuery = parsedQuery.Replace(kv.Key, kv.Value.ToString());
+          if (parsedQuery.Contains(kv.Key))
+          {
+            parsedQuery = parsedQuery.Replace(kv.Key, kv.Value.ToString());
+          }
         }
 
         parsedQuery = parsedQuery.Replace("\n", string.Empty);
@@ -101,6 +113,18 @@ namespace CodeInUnity.StateMachine
 
     private void ParseAnds(string qand, List<bool> ands, bool cutOnFirstFalse = true)
     {
+      if (qand == "1")
+      {
+        ands.Add(true);
+        return;
+      }
+
+      if (qand == "0")
+      {
+        ands.Add(false);
+        return;
+      }
+
       int opsLength = ops.Length;
 
       for (int i = 0; i < opsLength; i++)

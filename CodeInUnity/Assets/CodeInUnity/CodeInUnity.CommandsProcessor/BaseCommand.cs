@@ -36,6 +36,8 @@ namespace CodeInUnity.CommandsProcessor
 
     public float timeout = 0;
 
+    public float asyncDelayBeforeStart = 0f;
+
     [SerializeField]
     [HideInInspector]
     private CommandStatus status = CommandStatus.NotStarted;
