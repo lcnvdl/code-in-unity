@@ -17,7 +17,7 @@ namespace CodeInUnity.CommandsProcessor
 
     private List<BaseCommand> withDependencies = new List<BaseCommand>();
 
-    private List<string> deletedCommands = new List<string>();
+    private List<string> deletedCommandsInternalId = new List<string>();
 
     public bool IsWorking
     {
@@ -94,7 +94,7 @@ namespace CodeInUnity.CommandsProcessor
 
     public bool AddUniqueCommand(BaseCommand cmd)
     {
-      if (this.HasCommand(cmd.internalId))
+      if (this.HasCommandByInternalId(cmd.internalId))
       {
         return false;
       }
@@ -109,12 +109,12 @@ namespace CodeInUnity.CommandsProcessor
       return (T)this.commands.Find(m => m is T);
     }
 
-    public BaseCommand GetCommand(string id)
+    public BaseCommand GetCommandByInternalId(string id)
     {
       return this.commands.Find(m => m.internalId == id);
     }
 
-    public void CancelCommand(string id, string reason = null)
+    public void CancelCommandByInternalId(string id, string reason = null)
     {
       this.commands.Find(m => m.internalId == id)?.Cancel(reason);
     }
@@ -124,7 +124,7 @@ namespace CodeInUnity.CommandsProcessor
       return (T)this.commands.Find(m => m.internalId == id);
     }
 
-    public bool HasCommand(string id)
+    public bool HasCommandByInternalId(string id)
     {
       int count = this.commands.Count;
 
@@ -139,7 +139,7 @@ namespace CodeInUnity.CommandsProcessor
       return false;
     }
 
-    public void CancelCommands(string reason)
+    public void CancelAllCommands(string reason)
     {
       commands.FindAll(m => !m.IsFinished).ForEach(m => m.Cancel(reason));
       commands.Clear();
@@ -155,7 +155,7 @@ namespace CodeInUnity.CommandsProcessor
       }
 
       this.withDependencies.Clear();
-      this.deletedCommands.Clear();
+      this.deletedCommandsInternalId.Clear();
 
       for (int i = len - 1; i >= 0; i--)
       {
@@ -165,7 +165,10 @@ namespace CodeInUnity.CommandsProcessor
         {
           if (this.withDependencies.Count > 0)
           {
-            this.deletedCommands.Add(command.uuid);
+            if (!string.IsNullOrEmpty(command.internalId))
+            {
+              this.deletedCommandsInternalId.Add(command.internalId);
+            }
           }
 
           this.commands.RemoveAt(i);
@@ -203,15 +206,15 @@ namespace CodeInUnity.CommandsProcessor
     {
       int count = this.withDependencies.Count;
 
-      if (this.deletedCommands.Count > 0)
+      if (this.deletedCommandsInternalId.Count > 0)
       {
         for (int i = 0; i < count; i++)
         {
           var cmd = this.withDependencies[i];
 
-          foreach (var deletedId in this.deletedCommands)
+          foreach (var deletedId in this.deletedCommandsInternalId)
           {
-            cmd.RemoveDependency(deletedId);
+            cmd.RemoveDependencyByInternalId(deletedId);
           }
         }
       }
@@ -227,13 +230,13 @@ namespace CodeInUnity.CommandsProcessor
 
     private void UpdateDependenciesList(BaseCommand cmd)
     {
-      for (int i = cmd.Dependencies.Count - 1; i >= 0; i--)
+      for (int i = cmd.DependenciesByInternalId.Count - 1; i >= 0; i--)
       {
-        string m = cmd.Dependencies[i];
+        string m = cmd.DependenciesByInternalId[i];
 
-        if (!this.HasCommand(m))
+        if (!this.HasCommandByInternalId(m))
         {
-          cmd.Dependencies.RemoveAt(i);
+          cmd.DependenciesByInternalId.RemoveAt(i);
         }
       }
     }

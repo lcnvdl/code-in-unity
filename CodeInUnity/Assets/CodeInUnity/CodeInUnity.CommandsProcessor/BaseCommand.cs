@@ -4,25 +4,16 @@ using UnityEngine;
 
 namespace CodeInUnity.CommandsProcessor
 {
-  public enum CommandStatus
-  {
-    NotStarted,
-    Running,
-    Paused,
-    Finished,
-    Cancelled
-  }
-
   [Serializable]
   public abstract class BaseCommand
   {
     [HideInInspector]
-    public string uuid;
+    public Guid uuid;
 
     public string internalId;
 
     [SerializeField]
-    private List<string> dependencies;
+    private List<string> dependenciesByInternalId;
 
     public bool isAsync = false;
 
@@ -55,9 +46,9 @@ namespace CodeInUnity.CommandsProcessor
 
     public bool IsInFinishedStatus => this.IsFinished || this.IsCancelled;
 
-    public bool HasDependencies => this.dependencies != null && this.dependencies.Count > 0;
+    public bool HasDependencies => this.dependenciesByInternalId != null && this.dependenciesByInternalId.Count > 0;
 
-    public List<string> Dependencies => this.dependencies;
+    public List<string> DependenciesByInternalId => this.dependenciesByInternalId;
 
     public CommandStatus Status => this.status;
 
@@ -89,10 +80,10 @@ namespace CodeInUnity.CommandsProcessor
 
     public BaseCommand()
     {
-      this.uuid = Guid.NewGuid().ToString();
+      this.uuid = Guid.NewGuid();
     }
 
-    public BaseCommand(string uuid)
+    public BaseCommand(Guid uuid)
     {
       this.uuid = uuid;
     }
@@ -137,24 +128,24 @@ namespace CodeInUnity.CommandsProcessor
       this.OnCancelOrFinish();
     }
 
-    public void AddDependency(string name)
+    public void AddInternalIdDependency(string internalId)
     {
-      if (this.dependencies == null)
+      if (this.dependenciesByInternalId == null)
       {
-        this.dependencies = new List<string>();
+        this.dependenciesByInternalId = new List<string>();
       }
 
-      this.dependencies.Add(name);
+      this.dependenciesByInternalId.Add(internalId);
     }
 
-    public void RemoveDependency(string name)
+    public void RemoveDependencyByInternalId(string internalId)
     {
-      if (this.dependencies == null)
+      if (this.dependenciesByInternalId == null)
       {
         return;
       }
 
-      this.dependencies.Remove(name);
+      this.dependenciesByInternalId.Remove(internalId);
     }
 
     protected virtual void Finish()
@@ -172,7 +163,15 @@ namespace CodeInUnity.CommandsProcessor
 
     public BaseCommand Clone()
     {
-      return this.MemberwiseClone() as BaseCommand;
+      var clone = (BaseCommand)this.MemberwiseClone();
+
+      if (this.dependenciesByInternalId != null)
+      {
+        clone.dependenciesByInternalId = new List<string>();
+        clone.dependenciesByInternalId.AddRange(this.dependenciesByInternalId);
+      }
+
+      return clone;
     }
   }
 }

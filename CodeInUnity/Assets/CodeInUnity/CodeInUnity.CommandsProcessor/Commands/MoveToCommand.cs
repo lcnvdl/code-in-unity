@@ -48,7 +48,7 @@ namespace CodeInUnity.Commands
         {
         }
 
-        public MoveToCommand(string uuid) : base(uuid)
+        public MoveToCommand(Guid uuid) : base(uuid)
         {
         }
 
