@@ -53,6 +53,11 @@ namespace CodeInUnity.Scripts.Managers
 
         return instance;
       }
+
+      set
+      {
+        instance = value;
+      }
     }
 
     void OnEnable()
