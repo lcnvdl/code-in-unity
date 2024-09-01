@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using CodeInUnity.Core.IO.CSV;
 
 namespace CodeInUnity.Core.IO
@@ -224,7 +222,8 @@ namespace CodeInUnity.Core.IO
 
             if (!string.IsNullOrEmpty(currentLine))
             {
-              this.cache.AddRange(currentLine.TrimStart().ToCharArray());
+              //this.cache.AddRange(currentLine.TrimStart().ToCharArray());
+              this.cache.AddRange(currentLine.ToCharArray());
               this.cache.Add('\n');
             }
           }

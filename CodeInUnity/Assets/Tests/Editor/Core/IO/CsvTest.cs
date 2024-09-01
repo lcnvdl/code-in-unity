@@ -54,6 +54,32 @@ namespace Tests
     }
 
     [Test]
+    public void CsvStreamReader_ReadToEnd_ShouldWorkFine_ForMultilineRow()
+    {
+      var csvString = ";\"Hola\n qué tal\";;;";
+
+      using (var reader = new CsvStreamReader(csvString))
+      {
+        var result = reader.ReadToEnd();
+        Assert.NotNull(result);
+        Assert.AreEqual("Hola\n qué tal", result[1].content);
+      }
+    }
+
+    [Test]
+    public void CsvStreamReader_ReadToEnd_ShouldWorkFine_ForMultilineRow2()
+    {
+      var csvString = ";\"Hola \nqué tal\";;;";
+
+      using (var reader = new CsvStreamReader(csvString))
+      {
+        var result = reader.ReadToEnd();
+        Assert.NotNull(result);
+        Assert.AreEqual("Hola \nqué tal", result[1].content);
+      }
+    }
+
+    [Test]
     public void CsvStreamReader_ReadToEnd_ShouldWorkFine_ForEmptyCellsSingleRow()
     {
       var csvString = ";;;;";
