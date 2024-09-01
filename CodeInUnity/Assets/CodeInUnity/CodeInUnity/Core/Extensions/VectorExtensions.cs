@@ -29,6 +29,11 @@ namespace CodeInUnity.Extensions
       return new Vector3(a.x * b.x, a.y * b.y, a.z * b.z);
     }
 
+    public static Vector2 ToVector2(this Vector2Int v)
+    {
+      return new Vector2(v.x, v.y);
+    }
+
     public static Vector2 Round(this Vector2 a)
     {
       return new Vector2(Mathf.Round(a.x), Mathf.Round(a.y));
