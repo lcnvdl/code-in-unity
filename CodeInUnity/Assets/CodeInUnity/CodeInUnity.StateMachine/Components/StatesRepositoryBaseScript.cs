@@ -19,14 +19,38 @@ namespace CodeInUnity.StateMachine.Components
 
     public BaseState GetState(string id)
     {
-      var state = this.baseStates.Find(m => !string.IsNullOrEmpty(m.identifier) && m.identifier.Equals(id, StringComparison.InvariantCultureIgnoreCase));
-      return state;
+      int count = this.baseStates.Count;
+
+      for (int i = 0; i < count; i++)
+      {
+        var state = this.baseStates[i];
+        if (!string.IsNullOrEmpty(state.identifier) && state.identifier.Equals(id, StringComparison.OrdinalIgnoreCase))
+        {
+          return state;
+        }
+      }
+
+      return null;
     }
 
     public T GetState<T>() where T : BaseState
     {
-      T state = this.baseStates.Find(m => !string.IsNullOrEmpty(m.identifier) && m is T) as T;
-      return state;
+      int count = this.baseStates.Count;
+
+      for (int i = 0; i < count; i++)
+      {
+        var baseState = this.baseStates[i];
+        if (!string.IsNullOrEmpty(baseState.identifier))
+        {
+          T m = baseState as T;
+          if (m != null)
+          {
+            return m;
+          }
+        }
+      }
+
+      return null;
     }
 
     public virtual AnyState GetRootState()
