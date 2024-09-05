@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -104,14 +105,41 @@ namespace CodeInUnity.CommandsProcessor
       return true;
     }
 
-    public T GetCommand<T>() where T : BaseCommand
+    public T GetCommandByType<T>() where T : BaseCommand
     {
       return (T)this.commands.Find(m => m is T);
     }
 
     public BaseCommand GetCommandByInternalId(string id)
     {
-      return this.commands.Find(m => m.internalId == id);
+      int count = this.commands.Count;
+
+      for (int i = 0; i < count; i++)
+      {
+        var cmd = this.commands[i];
+        if (cmd.internalId == id)
+        {
+          return cmd;
+        }
+      }
+
+      return null;
+    }
+
+    public BaseCommand GetCommandById(Guid id)
+    {
+      int count = this.commands.Count;
+
+      for (int i = 0; i < count; i++)
+      {
+        var cmd = this.commands[i];
+        if (cmd.uuid == id)
+        {
+          return cmd;
+        }
+      }
+
+      return null;
     }
 
     public void CancelCommandByInternalId(string id, string reason = null)
@@ -119,9 +147,9 @@ namespace CodeInUnity.CommandsProcessor
       this.commands.Find(m => m.internalId == id)?.Cancel(reason);
     }
 
-    public T GetCommand<T>(string id) where T : BaseCommand
+    public T GetCommand<T>(string internalId) where T : BaseCommand
     {
-      return (T)this.commands.Find(m => m.internalId == id);
+      return (T)this.commands.Find(m => m.internalId == internalId);
     }
 
     public bool HasCommandByInternalId(string id)

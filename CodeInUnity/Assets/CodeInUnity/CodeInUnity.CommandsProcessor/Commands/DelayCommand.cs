@@ -11,9 +11,7 @@ namespace CodeInUnity.Commands
 
         public float totalDelay;
 
-        [SerializeField]
-        [HideInInspector]
-        private float timeLeft;
+        public float timeLeft;
 
         public DelayCommand()
         {

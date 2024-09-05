@@ -3,6 +3,7 @@
   public enum CommandStatus
   {
     NotStarted,
+    PausedBeforeStart,
     Running,
     Paused,
     Finished,

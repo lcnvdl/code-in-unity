@@ -12,6 +12,10 @@ namespace CodeInUnity.CommandsProcessor
 
     public string internalId;
 
+    public string group;
+
+    public string customTag;
+
     [SerializeField]
     private List<string> dependenciesByInternalId;
 
@@ -38,7 +42,7 @@ namespace CodeInUnity.CommandsProcessor
     /// <summary>
     /// Pausado porque se asigno CPU a otro con más prioridad.
     /// </summary>
-    public bool IsPaused => this.status == CommandStatus.Paused;
+    public bool IsPaused => this.status == CommandStatus.Paused || this.status == CommandStatus.PausedBeforeStart;
 
     public bool IsCancelled => this.status == CommandStatus.Cancelled;
 
@@ -98,14 +102,26 @@ namespace CodeInUnity.CommandsProcessor
 
     public virtual void Pause()
     {
-      this.status = CommandStatus.Paused;
-      //Debug.Log(this.GetType().Name + " paused");
+      if (this.status == CommandStatus.NotStarted)
+      {
+        this.status = CommandStatus.PausedBeforeStart;
+      }
+      else
+      {
+        this.status = CommandStatus.Paused;
+      }
     }
 
     public virtual void Unpause()
     {
-      this.status = CommandStatus.Running;
-      //Debug.Log(this.GetType().Name + " unpaused");
+      if (this.status == CommandStatus.PausedBeforeStart)
+      {
+        this.status = CommandStatus.NotStarted;
+      }
+      else
+      {
+        this.status = CommandStatus.Running;
+      }
     }
 
     public void Step(float dt, GameObject gameObject)
