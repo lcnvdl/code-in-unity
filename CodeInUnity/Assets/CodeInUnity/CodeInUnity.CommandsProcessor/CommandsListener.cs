@@ -11,7 +11,11 @@ namespace CodeInUnity.CommandsProcessor
 
     public bool runOnFixedUpdate = false;
 
-    public bool isPaused = false;
+    public bool isManuallyPaused = false;
+
+    [SerializeField]
+    [HideInInspector]
+    private int locksForPause = 0;
 
     [SerializeReference]
     public List<BaseCommand> commands = new List<BaseCommand>();
@@ -37,6 +41,8 @@ namespace CodeInUnity.CommandsProcessor
     }
 
     public bool HasCommands => this.commands.Count > 0;
+
+    public bool IsPaused => this.locksForPause > 0 || this.isManuallyPaused;
 
     public bool IsEmpty
     {
@@ -77,7 +83,7 @@ namespace CodeInUnity.CommandsProcessor
 
     public virtual void NextStep(float dt)
     {
-      if (this.isPaused)
+      if (this.IsPaused)
       {
         return;
       }
@@ -150,6 +156,16 @@ namespace CodeInUnity.CommandsProcessor
     public T GetCommand<T>(string internalId) where T : BaseCommand
     {
       return (T)this.commands.Find(m => m.internalId == internalId);
+    }
+
+    public void Pause()
+    {
+      this.locksForPause++;
+    }
+
+    public void Unpause()
+    {
+      this.locksForPause--;
     }
 
     public bool HasCommandByInternalId(string id)
