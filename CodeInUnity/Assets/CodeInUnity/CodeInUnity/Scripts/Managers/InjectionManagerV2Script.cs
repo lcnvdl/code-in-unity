@@ -138,7 +138,7 @@ namespace CodeInUnity.Scripts.Managers
 
           // Debug.Log($"Transform binding {interfaceKey} saved");
         }
-        else
+        else if (Application.isEditor)
         {
           Debug.LogWarning("Binding value of " + interfaceKey + " couldn't be serialized.");
         }
@@ -207,20 +207,20 @@ namespace CodeInUnity.Scripts.Managers
         {
           bool isActiveAndEnabled = (val as MonoBehaviour).isActiveAndEnabled;
         }
-      catch (Exception ex)
-      {
-        if ((ex is NullReferenceException) || (ex is MissingReferenceException))
+        catch (Exception ex)
         {
-          Debug.LogWarning($"Null script for key {key}. Trying to infer...");
-          tryingToInfer = true;
-          hasValue = false;
-          val = null;
+          if ((ex is NullReferenceException) || (ex is MissingReferenceException))
+          {
+            Debug.LogWarning($"Null script for key {key}. Trying to infer...");
+            tryingToInfer = true;
+            hasValue = false;
+            val = null;
+          }
+          else
+          {
+            throw;
+          }
         }
-        else
-        {
-          throw;
-        }
-      }
       }
 
       if (!hasValue || val == null)
@@ -282,17 +282,17 @@ namespace CodeInUnity.Scripts.Managers
       return value;
     }
 
-  public T LazyInitializeAnyOrScript<T, TScript>(ref T value) where TScript : MonoBehaviour, T
-  {
-    LazyInitializeAny(ref value);
-
-    if (value == null)
+    public T LazyInitializeAnyOrScript<T, TScript>(ref T value) where TScript : MonoBehaviour, T
     {
-      return FindAnyObjectByType<TScript>(FindObjectsInactive.Exclude);
-    }
+      LazyInitializeAny(ref value);
 
-    return value;
-  }
+      if (value == null)
+      {
+        return FindAnyObjectByType<TScript>(FindObjectsInactive.Exclude);
+      }
+
+      return value;
+    }
 
     public void Clear()
     {
