@@ -59,7 +59,7 @@ namespace CodeInUnity.Scripts.Optimizations
         {
           instance.gameObject.SetActive(false);
         }
-        else if (afterLoad == GPUMeshChildrenAutoOptimizeAfterLoadAction.Deactivate)
+        else if (afterLoad == GPUMeshChildrenAutoOptimizeAfterLoadAction.Destroy)
         {
           Destroy(instance.gameObject);
         }
