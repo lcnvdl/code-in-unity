@@ -13,6 +13,8 @@ namespace CodeInUnity.CommandsProcessor
 
     public bool isManuallyPaused = false;
 
+    public CommandsListenerSafeModeSettings safeModeSettings = CommandsListenerSafeModeSettings.Default;
+
     [SerializeField]
     [HideInInspector]
     private int locksForPause = 0;
@@ -189,6 +191,12 @@ namespace CodeInUnity.CommandsProcessor
       commands.Clear();
     }
 
+    public CommandsListener SetSafeModeSettings(CommandsListenerSafeModeSettings settings)
+    {
+      this.safeModeSettings = settings;
+      return this;
+    }
+
     private void SortAndClearCommands()
     {
       int len = this.commands.Count;
@@ -237,7 +245,27 @@ namespace CodeInUnity.CommandsProcessor
 
       if (nextSyncCommand != null)
       {
-        nextSyncCommand.Step(dt, gameObject);
+        if (this.safeModeSettings.enabled)
+        {
+          try
+          {
+            nextSyncCommand.Step(dt, gameObject);
+          }
+          catch (Exception ex)
+          {
+            if (this.safeModeSettings.logErrorsInUnityConsole)
+            {
+              Debug.LogError($"CommandsListener: error occurred in command '{nextSyncCommand.GetType().Name}'.");
+              Debug.LogException(ex);
+            }
+
+            nextSyncCommand.Cancel(ex.Message);
+          }
+        }
+        else
+        {
+          nextSyncCommand.Step(dt, gameObject);
+        }
 
         if (!nextSyncCommand.IsRunning)
         {
@@ -245,6 +273,60 @@ namespace CodeInUnity.CommandsProcessor
         }
       }
     }
+
+    private void HandleAsyncCommands(float dt)
+    {
+      if (this.commands.Count == 0)
+      {
+        return;
+      }
+
+      bool runInSafeMode = this.safeModeSettings.enabled;
+
+      foreach (var cmd in commands)
+      {
+        if (cmd.isAsync && !cmd.IsPaused && !cmd.HasDependencies)
+        {
+          if (cmd.Status == CommandStatus.NotStarted)
+          {
+            if (cmd.asyncDelayBeforeStart > 0)
+            {
+              cmd.asyncDelayBeforeStart -= dt;
+            }
+            else
+            {
+              cmd.Start(gameObject);
+            }
+          }
+
+          if (cmd.Status == CommandStatus.Running)
+          {
+            if (runInSafeMode)
+            {
+              try
+              {
+                cmd.Step(dt, gameObject);
+              }
+              catch (Exception ex)
+              {
+                if (this.safeModeSettings.logErrorsInUnityConsole)
+                {
+                  Debug.LogError($"CommandsListener: error occurred in command '{cmd.GetType().Name}'.");
+                  Debug.LogException(ex);
+                }
+
+                cmd.Cancel(ex.Message);
+              }
+            }
+            else
+            {
+              cmd.Step(dt, gameObject);
+            }
+          }
+        }
+      }
+    }
+
 
     private void UpdateDependenciesAfterDeleteCommands()
     {
@@ -340,37 +422,6 @@ namespace CodeInUnity.CommandsProcessor
       }
 
       return max + 1;
-    }
-
-    private void HandleAsyncCommands(float dt)
-    {
-      if (this.commands.Count == 0)
-      {
-        return;
-      }
-
-      foreach (var cmd in commands)
-      {
-        if (cmd.isAsync && !cmd.IsPaused && !cmd.HasDependencies)
-        {
-          if (cmd.Status == CommandStatus.NotStarted)
-          {
-            if (cmd.asyncDelayBeforeStart > 0)
-            {
-              cmd.asyncDelayBeforeStart -= dt;
-            }
-            else
-            {
-              cmd.Start(gameObject);
-            }
-          }
-
-          if (cmd.Status == CommandStatus.Running)
-          {
-            cmd.Step(dt, gameObject);
-          }
-        }
-      }
     }
 
     private static int SortCommands(BaseCommand x, BaseCommand y)
