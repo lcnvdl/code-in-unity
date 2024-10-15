@@ -4,6 +4,17 @@ namespace System.Linq
 {
   public static class NonAllocLinqExtension
   {
+    public static void ExceptTo<T>(this List<T> self, List<T> exceptList, List<T> to)
+    {
+      foreach (T entity in self)
+      {
+        if (!exceptList.Contains(entity))
+        {
+          to.Add(entity);
+        }
+      }
+    }
+
     public static T FirstOrDefaultNA<T>(this List<T> self)
     {
       return self.Count > 0 ? self[0] : default(T);
@@ -36,6 +47,11 @@ namespace System.Linq
     public static T LastOrDefaultNA<T>(this List<T> self)
     {
       return self.Count > 0 ? self[self.Count - 1] : default(T);
+    }
+
+    public static T LastNA<T>(this List<T> self)
+    {
+      return self[self.Count - 1];
     }
 
     public static bool AnyNA<T>(this List<T> self)
@@ -104,6 +120,20 @@ namespace System.Linq
       return false;
     }
 
+    public static bool ContainsOrdinal(this string[] self, string value)
+    {
+      int count = self.Length;
+      for (int i = 0; i < count; ++i)
+      {
+        if (value.Equals(self[i], StringComparison.Ordinal))
+        {
+          return true;
+        }
+      }
+
+      return false;
+    }
+
     private static bool SafeEquals(object a, object b)
     {
       if (a != null)
@@ -121,9 +151,9 @@ namespace System.Linq
 
     private static void QuickSortArray<T>(this List<T> array, Func<T, T, int> compare, int leftIndex, int rightIndex)
     {
-      var i = leftIndex;
-      var j = rightIndex;
-      var pivot = array[leftIndex];
+      int i = leftIndex;
+      int j = rightIndex;
+      T pivot = array[leftIndex];
 
       while (i <= j)
       {
@@ -148,9 +178,14 @@ namespace System.Linq
       }
 
       if (leftIndex < j)
+      {
         QuickSortArray(array, compare, leftIndex, j);
+      }
+
       if (i < rightIndex)
+      {
         QuickSortArray(array, compare, i, rightIndex);
+      }
     }
   }
 }
