@@ -11,7 +11,11 @@ namespace CodeInUnity.Scripts.Managers
   {
     private static bool instanceWasCreated = false;
 
+    private Dictionary<Type, string> emptyArrayKeyCache = new Dictionary<Type, string>();
+
     private Dictionary<string, object> objects = new Dictionary<string, object>();
+
+    private List<Type> nonSerializables = new List<Type>();
 
     #region OnlyForSerializationPurposes
     [SerializeField]
@@ -123,7 +127,7 @@ namespace CodeInUnity.Scripts.Managers
 
           string implementationKey = kv.Value.GetType().Name;
 
-          if (implementationKey != interfaceKey)
+          if (!implementationKey.Equals(interfaceKey, StringComparison.Ordinal))
           {
             bindingInterfaces.Add(new SerializableKeyPairStrings() { key = interfaceKey, value = implementationKey });
           }
@@ -138,16 +142,23 @@ namespace CodeInUnity.Scripts.Managers
 
           // Debug.Log($"Transform binding {interfaceKey} saved");
         }
-        else if (Application.isEditor)
+        else if (Application.isEditor && !this.nonSerializables.Contains(kv.Value.GetType()))
         {
-          Debug.LogWarning("Binding value of " + interfaceKey + " couldn't be serialized.");
+          Debug.LogWarning($"Binding value of {interfaceKey} couldn't be serialized.");
         }
       }
     }
 
     public T[] GetEmptyArray<T>()
     {
-      string key = $"$array_{typeof(T).FullName}";
+      string key;
+      Type t = typeof(T);
+
+      if (!this.emptyArrayKeyCache.TryGetValue(t, out key))
+      {
+        key = $"$array_{t.FullName}";
+        this.emptyArrayKeyCache[t] = key;
+      }
 
       return this.GetEmptyArray<T>(key);
     }
@@ -179,6 +190,13 @@ namespace CodeInUnity.Scripts.Managers
     {
       objects[instance.GetType().FullName] = instance;
       objects[typeof(T).FullName] = instance;
+    }
+
+    public void BindAsNonSerializable<T>(T instance)
+    {
+      this.Bind(instance);
+
+      this.nonSerializables.Add(instance.GetType());
     }
 
     public T GetAny<T>()

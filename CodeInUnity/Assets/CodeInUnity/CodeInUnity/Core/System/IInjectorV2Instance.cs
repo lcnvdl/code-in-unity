@@ -6,6 +6,8 @@ namespace CodeInUnity.Core.System
   {
     void Bind<T>(T instance);
 
+    void BindAsNonSerializable<T>(T instance);
+
     T GetAny<T>();
 
     T GetScript<T>() where T : MonoBehaviour;
