@@ -42,6 +42,22 @@ namespace CodeInUnity.Core.Utils
       return (bp == bLen);
     }
 
+    public static int CountOccurences(string text, char c)
+    {
+      int len = text.Length;
+      int count = 0;
+
+      for (int i = 0; i < len; i++)
+      {
+        if (text[i].Equals(c))
+        {
+          count++;
+        }
+      }
+
+      return count;
+    }
+
     public static string Decapitalize(string word)
     {
       if (word == null || word.Length == 0)
