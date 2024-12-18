@@ -185,6 +185,12 @@ namespace CodeInUnity.CommandsProcessor
       return false;
     }
 
+    public void CancelAllCommands()
+    {
+      commands.FindAll(m => !m.IsFinished).ForEach(m => m.Cancel());
+      commands.Clear();
+    }
+
     public void CancelAllCommands(string reason)
     {
       commands.FindAll(m => !m.IsFinished).ForEach(m => m.Cancel(reason));
