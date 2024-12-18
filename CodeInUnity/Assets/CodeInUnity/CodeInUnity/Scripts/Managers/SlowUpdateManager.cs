@@ -50,6 +50,11 @@ namespace CodeInUnity.Scripts.Managers
 
     private void Start()
     {
+      if (instance != null && instance != this)
+      {
+        Destroy(instance.gameObject);
+      }
+
       instance = this;
     }
 
