@@ -2,7 +2,7 @@ using System.Data;
 
 namespace CodeInUnity.Core.IO.CSV
 {
-  public class CsvParser
+  public static class CsvParser
   {
     public static DataTable ToDataTable(CsvStreamReader reader)
     {

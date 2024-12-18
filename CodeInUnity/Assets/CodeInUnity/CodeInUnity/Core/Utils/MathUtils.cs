@@ -1,5 +1,8 @@
+using S = System;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using UnityEngine;
+using System;
 
 namespace CodeInUnity.Core.Utils
 {
@@ -25,6 +28,30 @@ namespace CodeInUnity.Core.Utils
       return numbers.Sum() / numbers.Length;
     }
 
+    public static ulong SumUlong(params ulong[] numbers)
+    {
+      if (numbers == null || numbers.Length == 0)
+      {
+        return 0;
+      }
+
+      ulong sum = 0;
+
+      foreach (var value in numbers)
+      {
+        sum += value;
+      }
+
+      return sum;
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static bool IsPair(int x)
+    {
+      return x % 2 == 0;
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static int Mod(int x, int m)
     {
       return (x % m + m) % m;
@@ -64,7 +91,7 @@ namespace CodeInUnity.Core.Utils
 
       return angle;
     }
-    
+
     public static float WrapFloat(float value, float start, float end)
     {
       float width = end - start;   // 
@@ -72,7 +99,7 @@ namespace CodeInUnity.Core.Utils
 
       return (offsetValue - (Mathf.Floor(offsetValue / width) * width)) + start;
     }
-    
+
     public static int WrapInt(int value, int start, int end)
     {
       int width = end - start;   // 
@@ -84,6 +111,11 @@ namespace CodeInUnity.Core.Utils
     public static bool IsSimilar(float a, float b, float delta = float.Epsilon)
     {
       return Mathf.Abs(a - b) <= delta;
+    }
+
+    public static float Round(float value, int digits)
+    {
+      return (float)S.Math.Round(value, digits);
     }
   }
 }

@@ -120,6 +120,20 @@ namespace System.Linq
       return false;
     }
 
+    public static bool ContainsOrdinal(this List<string> self, string value)
+    {
+      int count = self.Count;
+      for (int i = 0; i < count; ++i)
+      {
+        if (value.Equals(self[i], StringComparison.Ordinal))
+        {
+          return true;
+        }
+      }
+
+      return false;
+    }
+
     public static bool ContainsOrdinal(this string[] self, string value)
     {
       int count = self.Length;
