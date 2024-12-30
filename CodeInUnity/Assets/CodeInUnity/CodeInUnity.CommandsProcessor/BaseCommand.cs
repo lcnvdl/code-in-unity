@@ -177,6 +177,24 @@ namespace CodeInUnity.CommandsProcessor
 
     protected abstract void Work(float dt, GameObject gameObject);
 
+    public BaseCommand AsAsync()
+    {
+      this.isAsync = true;
+      return this;
+    }
+
+    public BaseCommand WithAsyncDelay(float delay)
+    {
+      this.asyncDelayBeforeStart = delay;
+      return this;
+    }
+
+    public BaseCommand WithInternalId(string id)
+    {
+      this.internalId = id;
+      return this;
+    }
+
     public BaseCommand Clone()
     {
       var clone = (BaseCommand)this.MemberwiseClone();
