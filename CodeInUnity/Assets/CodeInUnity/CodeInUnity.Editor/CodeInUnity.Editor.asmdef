@@ -1,6 +1,9 @@
 {
     "name": "CodeInUnity.Editor",
-    "references": [],
+    "rootNamespace": "",
+    "references": [
+        "GUID:0130a9f3bb8b2214e93eb607378a3471"
+    ],
     "includePlatforms": [
         "Editor"
     ],
