@@ -25,6 +25,15 @@ namespace CodeInUnity.Core.Security
 
     private S.Random RandomInstance => this.randomInstance ?? (this.randomInstance = new S.Random(this.currentSeed));
 
+    public SeededRandom()
+    {
+    }
+
+    public SeededRandom(int seed)
+    {
+      this.Seed = seed;
+    }
+
     public float Range(float minInclusive, float maxInclusive)
     {
       double next = this.RandomInstance.NextDouble();
@@ -56,6 +65,11 @@ namespace CodeInUnity.Core.Security
     public void RandomizeTimeBased()
     {
       this.Seed = (int)(DateTime.Now.Ticks % 9999);
+    }
+
+    public SeededRandom GetNewWithSameSeed()
+    {
+      return new SeededRandom(this.Seed);
     }
 
     public static SeededRandom NewRandomized()
