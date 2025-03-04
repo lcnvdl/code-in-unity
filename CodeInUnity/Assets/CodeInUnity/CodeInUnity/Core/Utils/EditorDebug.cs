@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 namespace UnityEngine
 {
@@ -21,6 +22,13 @@ namespace UnityEngine
     {
 #if UNITY_EDITOR
       Debug.LogWarning(message);
+#endif
+    }
+
+    public static void LogError(object message)
+    {
+#if UNITY_EDITOR
+      Debug.LogError(message);
 #endif
     }
 
@@ -48,6 +56,13 @@ namespace UnityEngine
       {
         Log(message, args);
       }
+#endif
+    }
+
+    public static void LogException(Exception ex)
+    {
+#if UNITY_EDITOR
+      Debug.LogException(ex);
 #endif
     }
   }

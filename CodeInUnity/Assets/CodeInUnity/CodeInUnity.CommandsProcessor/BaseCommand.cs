@@ -12,6 +12,8 @@ namespace CodeInUnity.CommandsProcessor
 
     public string internalId;
 
+    public string nameForDebug;
+
     public string group;
 
     public string customTag;
@@ -85,11 +87,19 @@ namespace CodeInUnity.CommandsProcessor
     public BaseCommand()
     {
       this.uuid = Guid.NewGuid();
+
+#if UNITY_EDITOR
+      this.nameForDebug = this.GetType().Name;
+#endif
     }
 
     public BaseCommand(Guid uuid)
     {
       this.uuid = uuid;
+
+#if UNITY_EDITOR
+      this.nameForDebug = this.GetType().Name;
+#endif
     }
 
     public virtual void Start(GameObject gameObject)
@@ -180,6 +190,12 @@ namespace CodeInUnity.CommandsProcessor
     public BaseCommand AsAsync()
     {
       this.isAsync = true;
+      return this;
+    }
+
+    public BaseCommand SetTimeout(float timeout)
+    {
+      this.timeout = timeout;
       return this;
     }
 
