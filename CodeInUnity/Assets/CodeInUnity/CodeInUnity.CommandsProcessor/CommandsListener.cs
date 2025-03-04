@@ -113,6 +113,20 @@ namespace CodeInUnity.CommandsProcessor
       return true;
     }
 
+    public bool AddUniqueCommandOrReplaceIfExists(BaseCommand cmd)
+    {
+      var existing = this.GetCommandByInternalId(cmd.internalId);
+
+      if (existing != null)
+      {
+        existing.Cancel();
+      }
+
+      this.AddCommand(cmd);
+
+      return true;
+    }
+
     public T GetCommandByType<T>() where T : BaseCommand
     {
       return (T)this.commands.Find(m => m is T);
