@@ -21,12 +21,12 @@ namespace CodeInUnity.Scripts.UI
 
     private void Awake()
     {
-      frameDeltaTimeArray = new float[50];
+      frameDeltaTimeArray = new float[60];
     }
 
     private void Update()
     {
-      frameDeltaTimeArray[lastFrameIndex] = Time.deltaTime;
+      frameDeltaTimeArray[lastFrameIndex] = Time.unscaledDeltaTime;
       lastFrameIndex = (lastFrameIndex + 1) % frameDeltaTimeArray.Length;
 
       if (lastFrameIndex == 0)
