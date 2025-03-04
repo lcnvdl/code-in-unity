@@ -97,5 +97,18 @@ namespace CodeInUnity.Core.Utils
 
       return word.Remove(1).ToUpper() + (tailToLowerCase ? word.Substring(1).ToLower() : word.Substring(1));
     }
+
+    public static bool IsOnlyDigits(string input)
+    {
+      foreach (char c in input)
+      {
+        if (!char.IsDigit(c))
+        {
+          return false;
+        }
+      }
+
+      return true;
+    }
   }
 }
