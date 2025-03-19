@@ -21,22 +21,19 @@ namespace CodeInUnity.Scripts.UI
     private Text textComponent;
 
     [SerializeField]
-    [HideInInspector]
     private string format = "$FPS";
+
+    [SerializeField]
+    private int samples = 50;
 
     private void Awake()
     {
-      frameDeltaTimeArray = new float[50];
-
-      if (!string.IsNullOrEmpty(textComponent.text))
-      {
-        format = textComponent.text;
-      }
+      frameDeltaTimeArray = new float[samples];
     }
 
     private void Update()
     {
-      frameDeltaTimeArray[lastFrameIndex] = Time.deltaTime;
+      frameDeltaTimeArray[lastFrameIndex] = Time.unscaledDeltaTime;
       lastFrameIndex = (lastFrameIndex + 1) % frameDeltaTimeArray.Length;
 
       if (lastFrameIndex == 0)
@@ -44,7 +41,7 @@ namespace CodeInUnity.Scripts.UI
         int fps = Mathf.RoundToInt(this.CalculateFPS());
         if (lastFPS != fps)
         {
-          textComponent.text = format.Replace("$FPS", fps.ToString());
+          textComponent.text = string.IsNullOrEmpty(format) ? fps.ToString() : format.Replace("$FPS", fps.ToString());
           lastFPS = fps;
         }
       }
