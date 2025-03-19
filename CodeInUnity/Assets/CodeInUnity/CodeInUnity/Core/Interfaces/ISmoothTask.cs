@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CodeInUnity.Interfaces
+﻿namespace CodeInUnity.Interfaces
 {
   public interface ISmoothTask
   {
