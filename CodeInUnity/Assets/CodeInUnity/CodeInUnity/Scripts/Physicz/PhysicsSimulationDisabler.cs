@@ -1,10 +1,13 @@
 using UnityEngine;
 
-public class PhysicsSimulationDisabler : MonoBehaviour
+namespace CodeInUnity.Scripts.Physicz
 {
-  void OnEnable()
+  public class PhysicsSimulationDisabler : MonoBehaviour
   {
-    Physics.autoSimulation = false;
-    Physics2D.simulationMode = SimulationMode2D.Script;
+    void OnEnable()
+    {
+      Physics.autoSimulation = false;
+      Physics2D.simulationMode = SimulationMode2D.Script;
+    }
   }
 }
