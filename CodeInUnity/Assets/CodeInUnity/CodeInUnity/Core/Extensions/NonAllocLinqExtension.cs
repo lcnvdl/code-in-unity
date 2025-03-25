@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace System.Linq
 {
@@ -18,6 +19,21 @@ namespace System.Linq
     public static T FirstOrDefaultNA<T>(this List<T> self)
     {
       return self.Count > 0 ? self[0] : default(T);
+    }
+
+    public static T FirstOrDefaultNA<T>(this T[] self)
+    {
+      return self.Length > 0 ? self[0] : default(T);
+    }
+
+    public static T FirstNA<T>(this List<T> self)
+    {
+      return self[0];
+    }
+
+    public static T FirstNA<T>(this T[] self)
+    {
+      return self[0];
     }
 
     public static T ShiftNA<T>(this List<T> self)
@@ -52,6 +68,11 @@ namespace System.Linq
     public static T LastNA<T>(this List<T> self)
     {
       return self[self.Count - 1];
+    }
+
+    public static T LastNA<T>(this T[] self)
+    {
+      return self[self.Length - 1];
     }
 
     public static bool AnyNA<T>(this List<T> self)
