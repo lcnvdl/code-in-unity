@@ -113,6 +113,11 @@ namespace CodeInUnity.Core.Utils
       return Mathf.Abs(a - b) <= delta;
     }
 
+    public static bool IsBetween(float value, float min, float max)
+    {
+      return value >= min && value <= max;
+    }
+
     public static float Round(float value, int digits)
     {
       return (float)S.Math.Round(value, digits);

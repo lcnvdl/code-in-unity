@@ -1,11 +1,12 @@
 ﻿using System;
+using CodeInUnity.Core.Interfaces;
 using UnityEngine;
 using S = System;
 
 namespace CodeInUnity.Core.Security
 {
   [S.Serializable]
-  public class SeededRandom
+  public class SeededRandom : ISeededRandom
   {
     [SerializeField]
     [HideInInspector]
@@ -42,8 +43,17 @@ namespace CodeInUnity.Core.Security
 
     public double Next()
     {
-      double next = this.RandomInstance.NextDouble();
-      return next;
+      return this.RandomInstance.NextDouble();
+    }
+
+    public double NextDouble()
+    {
+      return this.RandomInstance.NextDouble();
+    }
+
+    public float NextFloat()
+    {
+      return (float)this.RandomInstance.NextDouble();
     }
 
     public float Next(float maxInclusive)
@@ -78,6 +88,11 @@ namespace CodeInUnity.Core.Security
       random.RandomizeTimeBased();
 
       return random;
+    }
+
+    public void Reset()
+    {
+      this.Seed = this.currentSeed;
     }
   }
 }
