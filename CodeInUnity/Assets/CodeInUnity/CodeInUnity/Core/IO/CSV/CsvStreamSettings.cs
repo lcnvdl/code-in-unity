@@ -11,6 +11,14 @@ namespace CodeInUnity.Core.IO.CSV
 
     public bool quoteAllTextCells = false;
 
-    public static CsvStreamSettings Default => new CsvStreamSettings();
+    public bool allowMultilineCells;
+
+    public static CsvStreamSettings Default => new CsvStreamSettings()
+    {
+      cellDelimiter = ';',
+      stringDelimiter = '"',
+      quoteAllTextCells = false,
+      allowMultilineCells = true,
+    };
   }
 }

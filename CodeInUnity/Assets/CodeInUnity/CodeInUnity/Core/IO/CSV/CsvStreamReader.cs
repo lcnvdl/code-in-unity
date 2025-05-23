@@ -114,16 +114,11 @@ namespace CodeInUnity.Core.IO
 
       if (this.cache.Count == 0)
       {
-        string currentLine = this.streamReader.ReadLine();
-
-        if (string.IsNullOrEmpty(currentLine))
+        bool isEmpty = !this.FillCellCache(true);
+        if (isEmpty)
         {
-          //  Skip empty lines
           return null;
         }
-
-        this.cache.AddRange(currentLine.TrimStart().ToCharArray());
-        this.cache.Add('\n');
       }
       else if (this.currentColumn == 0 && this.cache.Count == 1 && this.cache[0] == '\n')
       {
@@ -178,7 +173,7 @@ namespace CodeInUnity.Core.IO
 
         char previousCharacter = '-';
 
-        while (this.cache.Count > 0 && this.cache[0] != this.settings.cellDelimiter)
+        while (this.cache.Count > 0 && (this.cache[0] != this.settings.cellDelimiter || stringDelimiterStatus == DelimiterStatus.Open))
         {
           char character = this.cache[0];
           this.cache.RemoveAt(0);
@@ -205,7 +200,7 @@ namespace CodeInUnity.Core.IO
             }
             else
             {
-              throw new InvalidDataException($"Unexpected character {character}.");
+              throw new InvalidDataException($"Unexpected character '{character}'.");
             }
           }
           else
@@ -218,14 +213,7 @@ namespace CodeInUnity.Core.IO
 
           if (this.cache.Count == 0 && !this.streamReader.EndOfStream && stringDelimiterStatus == DelimiterStatus.Open)
           {
-            string currentLine = this.streamReader.ReadLine();
-
-            if (!string.IsNullOrEmpty(currentLine))
-            {
-              //this.cache.AddRange(currentLine.TrimStart().ToCharArray());
-              this.cache.AddRange(currentLine.ToCharArray());
-              this.cache.Add('\n');
-            }
+            this.FillCellCache(false);
           }
         }
 
@@ -248,13 +236,65 @@ namespace CodeInUnity.Core.IO
 
         if (stringDelimiterStatus == DelimiterStatus.Open)
         {
-          throw new InvalidDataException($"A character {this.settings.stringDelimiter} is missing.");
+          throw new InvalidDataException($"A character {this.settings.stringDelimiter} is missing in cell [Row: {this.currentRow}, Col: {this.currentColumn}].");
         }
 
         return cell;
       }
 
       throw new NotImplementedException();
+    }
+
+    private bool FillCellCache(bool trimStart, int? recursiveDelimiters = null)
+    {
+      string currentLine = this.streamReader.ReadLine();
+
+      if (string.IsNullOrEmpty(currentLine))
+      {
+        if (!this.settings.allowMultilineCells || !recursiveDelimiters.HasValue)
+        {
+          //  Skip empty lines
+          return false;
+        }
+      }
+
+      var lineAsCharArray = (trimStart ? currentLine.TrimStart() : currentLine).ToCharArray();
+
+      if (this.settings.allowMultilineCells)
+      {
+        int delimiters = recursiveDelimiters.HasValue ? recursiveDelimiters.Value : this.CountCacheDelimiters();
+
+        foreach (char c in lineAsCharArray)
+        {
+          if (c == this.settings.stringDelimiter)
+          {
+            if (delimiters == 1)
+            {
+              delimiters = 0;
+            }
+            else
+            {
+              delimiters = 1;
+            }
+          }
+
+          this.cache.Add(c);
+        }
+
+        this.cache.Add('\n');
+
+        if (delimiters == 1 && !this.streamReader.EndOfStream)
+        {
+          this.FillCellCache(false, delimiters);
+        }
+      }
+      else
+      {
+        this.cache.AddRange(lineAsCharArray);
+        this.cache.Add('\n');
+      }
+
+      return true;
     }
 
     public void Dispose()
@@ -272,6 +312,29 @@ namespace CodeInUnity.Core.IO
       }
 
       this.hasEnded = true;
+    }
+
+    private int CountCacheDelimiters()
+    {
+      int count = this.cache.Count;
+      int delimiters = 0;
+
+      for (int i = 0; i < count; i++)
+      {
+        if (this.cache[i] == this.settings.stringDelimiter)
+        {
+          if (delimiters == 1)
+          {
+            delimiters = 0;
+          }
+          else
+          {
+            delimiters = 1;
+          }
+        }
+      }
+
+      return delimiters;
     }
   }
 }
