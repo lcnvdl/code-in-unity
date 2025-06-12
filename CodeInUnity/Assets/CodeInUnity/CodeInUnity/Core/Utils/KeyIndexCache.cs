@@ -4,6 +4,11 @@ using CodeInUnity.Core.Interfaces;
 
 namespace CodeInUnity.Core.Utils
 {
+  /// <summary>
+  /// Provides a cache for storing and retrieving string values associated with a combination of a string key and an integer index.
+  /// 
+  /// Useful for efficiently managing and reusing values that are identified by a key-index pair, with support for lazy value generation.
+  /// </summary>
   public class KeyIndexCache : IKeyIndexCache
   {
     private Dictionary<string, Dictionary<int, string>> dictionary = new Dictionary<string, Dictionary<int, string>>();

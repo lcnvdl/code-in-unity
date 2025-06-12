@@ -5,6 +5,11 @@ using UnityEngine;
 
 namespace CodeInUnity.Scripts.Utils
 {
+  /// <summary>
+  /// Singleton MonoBehaviour that provides a globally accessible IKeyIndexCache instance in the Unity scene.
+  /// Provides a cache for storing and retrieving string values associated with a combination of a string key and an integer index.
+  /// Useful for efficiently managing and reusing values that are identified by a key-index pair, with support for lazy value generation.
+  /// </summary>
   public class KeyIndexCacheScript : MonoBehaviour, IKeyIndexCacheProvider
   {
     private static KeyIndexCacheScript instance;
