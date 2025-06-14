@@ -122,5 +122,11 @@ namespace CodeInUnity.Core.Utils
     {
       return (float)S.Math.Round(value, digits);
     }
+
+    public static int IncreaseInRange(ref int index, int maxValue)
+    {
+      index = Mod(index + 1, maxValue);
+      return index;
+    }
   }
 }
