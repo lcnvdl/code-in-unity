@@ -12,6 +12,10 @@ namespace CodeInUnity.Scripts.Actions.Events
     
     public UnityEvent onTest;
 
+    public UnityEvent onDevelopmentBuild;
+
+    public UnityEvent onProductionBuild;
+
     private void Awake()
     {
 #if UNITY_EDITOR
@@ -19,14 +23,21 @@ namespace CodeInUnity.Scripts.Actions.Events
 
       if (isTest)
       {
-        this.onTest.Invoke();
+        this.onTest?.Invoke();
       }
       else
       {
-        this.onEditor.Invoke();
+        this.onEditor?.Invoke();
       }
 #else
-      this.onProduction.Invoke();
+      this.onProduction?.Invoke();
+
+#if DEVELOPMENT_BUILD
+      this.onDevelopmentBuild?.Invoke();
+#else
+      this.onProductionBuild?.Invoke();
+#endif
+
 #endif
     }
   }

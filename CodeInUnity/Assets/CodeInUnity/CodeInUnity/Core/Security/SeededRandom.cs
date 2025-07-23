@@ -67,6 +67,11 @@ namespace CodeInUnity.Core.Security
       return this.RandomInstance.Next(minInclusive, maxExclusive);
     }
 
+    public T Choose<T>(params T[] values)
+    {
+      return values[this.RandomInstance.Next(values.Length)];
+    }
+
     public int Next(int maxExclusive)
     {
       return this.RandomInstance.Next(maxExclusive);
