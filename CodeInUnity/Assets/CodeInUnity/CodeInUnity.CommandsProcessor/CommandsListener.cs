@@ -129,7 +129,7 @@ namespace CodeInUnity.CommandsProcessor
 
     public T GetCommandByType<T>() where T : BaseCommand
     {
-      return (T)this.commands.Find(m => m is T);
+      return (T)this.commands.Find(static m => m is T);
     }
 
     public BaseCommand GetCommandByInternalId(string id)
@@ -201,13 +201,13 @@ namespace CodeInUnity.CommandsProcessor
 
     public void CancelAllCommands()
     {
-      commands.FindAll(m => !m.IsFinished).ForEach(m => m.Cancel());
+      commands.FindAll(static m => !m.IsFinished).ForEach(static m => m.Cancel());
       commands.Clear();
     }
 
     public void CancelAllCommands(string reason)
     {
-      commands.FindAll(m => !m.IsFinished).ForEach(m => m.Cancel(reason));
+      commands.FindAll(static m => !m.IsFinished).ForEach(m => m.Cancel(reason));
       commands.Clear();
     }
 
@@ -394,7 +394,7 @@ namespace CodeInUnity.CommandsProcessor
         return null;
       }
 
-      var nextSyncCommand = this.commands.Find(m => !m.isAsync && !m.IsInFinishedStatus && !m.HasDependencies);
+      var nextSyncCommand = this.commands.Find(static m => !m.isAsync && !m.IsInFinishedStatus && !m.HasDependencies);
 
       if (nextSyncCommand != null)
       {

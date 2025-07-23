@@ -187,21 +187,27 @@ namespace CodeInUnity.CommandsProcessor
 
     protected abstract void Work(float dt, GameObject gameObject);
 
+    public BaseCommand WithDependency(string internalId)
+    {
+      this.AddInternalIdDependency(internalId);
+      return this;
+    }
+
     public BaseCommand AsAsync()
     {
       this.isAsync = true;
       return this;
     }
 
-    public BaseCommand SetTimeout(float timeout)
+    public BaseCommand SetTimeout(float timeoutInSeconds)
     {
-      this.timeout = timeout;
+      this.timeout = timeoutInSeconds;
       return this;
     }
 
-    public BaseCommand WithAsyncDelay(float delay)
+    public BaseCommand WithAsyncDelay(float delayInSeconds)
     {
-      this.asyncDelayBeforeStart = delay;
+      this.asyncDelayBeforeStart = delayInSeconds;
       return this;
     }
 
