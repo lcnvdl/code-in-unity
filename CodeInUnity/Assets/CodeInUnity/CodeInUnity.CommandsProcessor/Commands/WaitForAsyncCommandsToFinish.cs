@@ -22,10 +22,8 @@ namespace CodeInUnity.Commands
       this.listener = listener;
     }
 
-    public override void Start(GameObject gameObject)
+    protected override void OnStart(GameObject gameObject)
     {
-      base.Start(gameObject);
-
       foreach (var command in this.listener.commands)
       {
         if (command.isAsync)

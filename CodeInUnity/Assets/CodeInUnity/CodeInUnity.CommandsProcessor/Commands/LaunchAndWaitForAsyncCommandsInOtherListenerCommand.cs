@@ -28,10 +28,8 @@ namespace CodeInUnity.Commands
       this.subcommands.AddRange(commands);
     }
 
-    public override void Start(GameObject gameObject)
+    protected override void OnStart(GameObject gameObject)
     {
-      base.Start(gameObject);
-
       foreach (var cmd in subcommands)
       {
         cmd.isAsync = true;

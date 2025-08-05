@@ -303,8 +303,10 @@ namespace CodeInUnity.CommandsProcessor
 
       bool runInSafeMode = this.safeModeSettings.enabled;
 
-      foreach (var cmd in commands)
+      for (int i = 0; i < this.commands.Count; i++)
       {
+        var cmd = this.commands[i];
+
         if (cmd.isAsync && !cmd.IsPaused && !cmd.HasDependencies)
         {
           if (cmd.Status == CommandStatus.NotStarted)

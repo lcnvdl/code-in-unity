@@ -20,7 +20,7 @@ namespace CodeInUnity.Commands
 
     protected override void Work(float dt, GameObject gameObject)
     {
-      if (!this.condition())
+      if (this.condition())
       {
         return;
       }

@@ -104,9 +104,14 @@ namespace CodeInUnity.CommandsProcessor
 
     public virtual void Start(GameObject gameObject)
     {
+      GameObject target = this.manualTarget == null ? gameObject : this.manualTarget;
+
       this.status = CommandStatus.Running;
-      this.initialGameObject = gameObject;
-      this.LastGameObject = gameObject;
+      this.initialGameObject = target;
+      this.LastGameObject = target;
+
+      this.OnStart(target);
+
       //Debug.Log(this.GetType().Name + " started");
     }
 
@@ -182,6 +187,10 @@ namespace CodeInUnity.CommandsProcessor
     }
 
     protected virtual void OnCancelOrFinish()
+    {
+    }
+
+    protected virtual void OnStart(GameObject gameObject)
     {
     }
 
