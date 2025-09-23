@@ -1,8 +1,4 @@
-﻿#if UNITY_2022_1_OR_NEWER
-using System;
-#endif
-
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace CodeInUnity.Scripts.GameObjects
 {
