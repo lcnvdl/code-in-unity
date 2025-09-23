@@ -42,6 +42,21 @@ namespace CodeInUnity.Core.Utils
       return (bp == bLen);
     }
 
+    public static bool ContainsAnyUppercaseCharacter(string text)
+    {
+      int count = text.Length;
+
+      for (int i = 0; i < count; i++)
+      {
+        if (char.IsUpper(text[i]))
+        {
+          return true;
+        }
+      }
+
+      return false;
+    }
+
     public static int CountOccurences(string text, char c)
     {
       int len = text.Length;

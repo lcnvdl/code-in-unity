@@ -41,5 +41,12 @@ namespace Tests
       int result = StringUtils.CountOccurences("", 't');
       Assert.AreEqual(0, result);
     }
+
+    [Test]
+    public void ContainsAnyUppercaseCharacter_ShouldWorkFine()
+    {
+      Assert.IsFalse(StringUtils.ContainsAnyUppercaseCharacter("this is a text"));
+      Assert.IsTrue(StringUtils.ContainsAnyUppercaseCharacter("this is a Text"));
+    }
   }
 }

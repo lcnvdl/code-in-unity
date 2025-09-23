@@ -45,7 +45,10 @@ namespace CodeInUnity.Scripts.Managers
             {
               GameObject go = new GameObject("InjectionManagerV2");
               instance = go.AddComponent<InjectionManagerV2Script>();
-              DontDestroyOnLoad(go);
+              if (Application.isPlaying)
+              {
+                DontDestroyOnLoad(go);
+              }
               instanceWasCreated = true;
             }
             else
@@ -206,6 +209,20 @@ namespace CodeInUnity.Scripts.Managers
       if (!objects.TryGetValue(typeof(T).FullName, out val))
       {
         return default(T);
+      }
+
+      return (T)val;
+    }
+
+    public T LazyGetSingleton<T>() where T: new()
+    {
+      object val;
+
+      if (!objects.TryGetValue(typeof(T).FullName, out val))
+      {
+        var instance = new T();
+        BindAsNonSerializable(instance);
+        return instance;
       }
 
       return (T)val;

@@ -22,6 +22,8 @@ namespace CodeInUnity.Core.System
 
     T LazyInitializeScript<T>(ref T value) where T : MonoBehaviour;
 
+    T LazyGetSingleton<T>() where T : new();
+
     void Clear();
   }
 }
