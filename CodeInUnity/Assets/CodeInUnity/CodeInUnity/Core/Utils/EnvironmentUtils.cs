@@ -10,5 +10,13 @@ namespace CodeInUnity.Core.Utils
 #else
     public const bool IsInTestMode = false;
 #endif
+
+#if DEVELOPMENT_BUILD
+    public const bool IsDevelopmentBuild = true;
+#elif UNITY_EDITOR
+    public static bool IsDevelopmentBuild => false; // To remove the unreachable code warning
+#else
+    public const bool IsDevelopmentBuild = false;
+#endif
   }
 }
