@@ -113,6 +113,67 @@ namespace CodeInUnity.Core.Utils
       return word.Remove(1).ToUpper() + (tailToLowerCase ? word.Substring(1).ToLower() : word.Substring(1));
     }
 
+    public static bool ContainsAnyLetter(string input)
+    {
+      foreach (char c in input)
+      {
+        if (char.IsLetter(c))
+        {
+          return true;
+        }
+      }
+
+      return false;
+    }
+
+    public static bool ContainsAny(string input, char c1, char c2)
+    {
+      int length = input.Length;
+
+      for (int i = 0; i < length; i++)
+      {
+        char c = input[i];
+        if (c == c1 || c == c2)
+        {
+          return true;
+        }
+      }
+
+      return false;
+    }
+
+    public static bool ContainsAny(string input, char c1, char c2, char c3)
+    {
+      int length = input.Length;
+
+      for (int i = 0; i < length; i++)
+      {
+        char c = input[i];
+        if (c == c1 || c == c2 || c == c3)
+        {
+          return true;
+        }
+      }
+
+      return false;
+    }
+
+    public static bool ContainsAny(string input, params char[] characters)
+    {
+      foreach (char c in input)
+      {
+        foreach (char c2 in characters)
+        {
+          if (c == c2)
+          {
+            return true;
+          }
+        }
+      }
+
+      return false;
+    }
+
     public static bool IsOnlyDigits(string input)
     {
       foreach (char c in input)
