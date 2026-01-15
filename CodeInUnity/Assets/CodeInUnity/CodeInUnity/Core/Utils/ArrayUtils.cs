@@ -6,20 +6,32 @@ namespace CodeInUnity.Core.Utils
   {
     public static T Choose<T>(params T[] array)
     {
-      if (array.Length == 0)
-        return default;
-      else if (array.Length == 1)
-        return array[0];
-      else
-        return array[UnityEngine.Random.Range(0, array.Length)];
+      switch (array.Length)
+      {
+        case 0:
+          return default;
+
+        case 1:
+          return array[0];
+
+        default:
+          return array[UnityEngine.Random.Range(0, array.Length)];
+      }
     }
 
     public static T Choose<T>(List<T> array)
     {
-      if (array.Count == 0)
-        return default;
-      else
-        return array[UnityEngine.Random.Range(0, array.Count)];
+      switch (array.Count)
+      {
+        case 0:
+          return default;
+
+        case 1:
+          return array[0];
+
+        default:
+          return array[UnityEngine.Random.Range(0, array.Count)];
+      }
     }
 
     public static T PickFirstNotNull<T>(T instance1, T instance2)

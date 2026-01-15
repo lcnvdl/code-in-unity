@@ -6,7 +6,11 @@ namespace CodeInUnity.Scripts.Physicz
   {
     void OnEnable()
     {
+#if UNITY_2022_3_OR_NEWER
+      Physics.simulationMode = SimulationMode.Script;
+#else
       Physics.autoSimulation = false;
+#endif
       Physics2D.simulationMode = SimulationMode2D.Script;
     }
   }

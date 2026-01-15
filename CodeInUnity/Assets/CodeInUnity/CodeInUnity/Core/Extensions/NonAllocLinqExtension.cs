@@ -36,6 +36,34 @@ namespace System.Linq
       return self[0];
     }
 
+    public static int IndexOfNA<T>(this T[] self, T value)
+    {
+      int count = self.Length;
+      for (int i = 0; i < count; ++i)
+      {
+        if (SafeEquals(self[i], value))
+        {
+          return i;
+        }
+      }
+
+      return -1;
+    }
+
+    public static int FindIndex<T>(this T[] self, Func<T, bool> isValue)
+    {
+      int count = self.Length;
+      for (int i = 0; i < count; ++i)
+      {
+        if (isValue(self[i]))
+        {
+          return i;
+        }
+      }
+
+      return -1;
+    }
+
     public static T ShiftNA<T>(this List<T> self)
     {
       if (self.Count == 0)

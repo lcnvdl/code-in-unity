@@ -73,6 +73,38 @@ namespace CodeInUnity.Core.Utils
       return count;
     }
 
+    public static int CountOccurences(string text, char c1, char c2)
+    {
+      int len = text.Length;
+      int count = 0;
+
+      for (int i = 0; i < len; i++)
+      {
+        if (text[i] == c1 || text[i] == c2)
+        {
+          count++;
+        }
+      }
+
+      return count;
+    }
+
+    public static int CountOccurences(string text, char c1, char c2, char c3)
+    {
+      int len = text.Length;
+      int count = 0;
+
+      for (int i = 0; i < len; i++)
+      {
+        if (text[i] == c1 || text[i] == c2 || text[i] == c3)
+        {
+          count++;
+        }
+      }
+
+      return count;
+    }
+
     public static string Decapitalize(string word)
     {
       if (word == null || word.Length == 0)
