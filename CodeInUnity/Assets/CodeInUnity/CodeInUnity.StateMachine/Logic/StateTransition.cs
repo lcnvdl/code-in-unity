@@ -15,24 +15,27 @@ namespace CodeInUnity.StateMachine
 
     public string toState;
 
-    public bool interruptState = true;
+    public bool interruptState;
 
-    public bool IsEmpty => string.IsNullOrEmpty(query);
+    public bool IsEmpty => string.IsNullOrEmpty(this.query);
 
     public StateTransition()
     {
+      this.interruptState = true;
     }
 
-    public StateTransition(string toState)
+    public StateTransition(string toState, bool interruptState = true)
     {
       this.toState = toState;
       this.query = string.Empty;
+      this.interruptState = interruptState;
     }
 
-    public StateTransition(string toState, string query)
+    public StateTransition(string toState, string query, bool interruptState = true)
     {
       this.toState = toState;
       this.query = query;
+      this.interruptState = interruptState;
     }
 
     public bool Test(SerializableDictionary<string, float> variables, List<string> triggers)

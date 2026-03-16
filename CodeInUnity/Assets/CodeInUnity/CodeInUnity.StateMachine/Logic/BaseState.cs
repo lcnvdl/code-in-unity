@@ -60,11 +60,15 @@ namespace CodeInUnity.StateMachine
         {
           if (this.transitions[i].IsEmpty && this.isTaskFinished)
           {
+            UnityEngine.Debug.Log($"{this.Identifier}: Transition is empty and task is finished.");
+
             var newState = manager.StatesRepository?.GetState(this.transitions[i].toState);
             manager.SwitchState(newState);
           }
           else if (this.transitions[i].interruptState || this.isTaskFinished)
           {
+            UnityEngine.Debug.Log($"{this.Identifier}: Transition interruptState OR task is finished.");
+
             bool result = this.transitions[i].Test(manager.variables, manager.Triggers);
             if (result)
             {

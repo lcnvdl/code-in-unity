@@ -78,35 +78,35 @@ namespace CodeInUnity.StateMachine
 
     public virtual void Update(float deltaTime)
     {
-      if (lastState != currentState)
+      if (this.lastState != this.currentState)
       {
-        this.SwitchState(lastState, currentState);
+        this.SwitchState(this.lastState, this.currentState);
 
-        lastState = currentState;
+        this.lastState = this.currentState;
       }
-      
-      if (currentState != null)
+
+      if (this.currentState != null)
       {
-        rootState?.BeforeUpdateState(this, deltaTime);
+        this.rootState?.BeforeUpdateState(this, deltaTime);
 
-        if (currentState != lastState)
+        if (this.currentState != this.lastState)
         {
           this.ClearTriggers();
           this.Update(deltaTime);
           return;
         }
 
-        currentState.BeforeUpdateState(this, deltaTime);
+        this.currentState.BeforeUpdateState(this, deltaTime);
 
-        if (currentState != lastState)
+        if (this.currentState != this.lastState)
         {
           this.ClearTriggers();
           this.Update(deltaTime);
           return;
         }
 
-        rootState?.UpdateState(this, deltaTime);
-        currentState.UpdateState(this, deltaTime);
+        this.rootState?.UpdateState(this, deltaTime);
+        this.currentState.UpdateState(this, deltaTime);
       }
 
       this.ClearTriggers();
@@ -114,7 +114,7 @@ namespace CodeInUnity.StateMachine
 
     public void SwitchState(BaseState state)
     {
-      currentState = state;
+      this.currentState = state;
     }
 
     protected virtual void SwitchState(BaseState lastState, BaseState newState)
@@ -124,8 +124,11 @@ namespace CodeInUnity.StateMachine
         lastState.ExitState(this);
       }
 
-      newState.ResetState();
-      newState.EnterState(this);
+      if (newState != null)
+      {
+        newState.ResetState();
+        newState.EnterState(this);
+      }
     }
 
     public void Trigger(string triggerId)
