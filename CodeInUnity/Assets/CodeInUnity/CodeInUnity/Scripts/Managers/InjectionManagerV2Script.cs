@@ -101,12 +101,12 @@ namespace CodeInUnity.Scripts.Managers
           continue;
         }
 
-        objects[kv.key] = component;
+        this.objects[kv.key] = component;
       }
 
       foreach (var toDelete in keysToDelete)
       {
-        objects.Remove(toDelete);
+        this.objects.Remove(toDelete);
         this.bindingTransforms.RemoveAll(m => m.key == toDelete);
       }
     }
@@ -132,7 +132,7 @@ namespace CodeInUnity.Scripts.Managers
 
           if (!implementationKey.Equals(interfaceKey, StringComparison.Ordinal))
           {
-            bindingInterfaces.Add(new SerializableKeyPairStrings() { key = interfaceKey, value = implementationKey });
+            this.bindingInterfaces.Add(new SerializableKeyPairStrings() { key = interfaceKey, value = implementationKey });
           }
 
           var serializable = new SerializableKeyPairTransform()
@@ -170,10 +170,10 @@ namespace CodeInUnity.Scripts.Managers
     {
       object val;
 
-      if (!objects.TryGetValue(key, out val))
+      if (!this.objects.TryGetValue(key, out val))
       {
         val = new T[0];
-        objects[key] = val;
+        this.objects[key] = val;
       }
 
       return (T[])val;
@@ -181,18 +181,18 @@ namespace CodeInUnity.Scripts.Managers
 
     public void BindMany(object instance, Type[] types)
     {
-      objects[instance.GetType().FullName] = instance;
+      this.objects[instance.GetType().FullName] = instance;
 
       for (int i = 0; i < types.Length; i++)
       {
-        objects[types[i].FullName] = instance;
+        this.objects[types[i].FullName] = instance;
       }
     }
 
     public void Bind<T>(T instance)
     {
-      objects[instance.GetType().FullName] = instance;
-      objects[typeof(T).FullName] = instance;
+      this.objects[instance.GetType().FullName] = instance;
+      this.objects[typeof(T).FullName] = instance;
     }
 
     public void BindAsNonSerializable<T>(T instance)
@@ -206,7 +206,7 @@ namespace CodeInUnity.Scripts.Managers
     {
       object val;
 
-      if (!objects.TryGetValue(typeof(T).FullName, out val))
+      if (!this.objects.TryGetValue(typeof(T).FullName, out val))
       {
         return default(T);
       }
@@ -214,14 +214,14 @@ namespace CodeInUnity.Scripts.Managers
       return (T)val;
     }
 
-    public T LazyGetSingleton<T>() where T: new()
+    public T LazyGetSingleton<T>() where T : new()
     {
       object val;
 
-      if (!objects.TryGetValue(typeof(T).FullName, out val))
+      if (!this.objects.TryGetValue(typeof(T).FullName, out val))
       {
         var instance = new T();
-        BindAsNonSerializable(instance);
+        this.BindAsNonSerializable(instance);
         return instance;
       }
 
@@ -233,7 +233,7 @@ namespace CodeInUnity.Scripts.Managers
       string key = typeof(T).FullName;
       object val;
 
-      bool hasValue = objects.TryGetValue(key, out val);
+      bool hasValue = this.objects.TryGetValue(key, out val);
       bool tryingToInfer = false;
 
       if (hasValue)
@@ -269,7 +269,7 @@ namespace CodeInUnity.Scripts.Managers
 
         if (result != null)
         {
-          objects[typeof(T).FullName] = result;
+          this.objects[typeof(T).FullName] = result;
 
           if (tryingToInfer)
           {
@@ -290,7 +290,7 @@ namespace CodeInUnity.Scripts.Managers
       return (T)val;
     }
 
-    public T GetAny<T>(ref T value) => LazyInitializeAny<T>(ref value);
+    public T GetAny<T>(ref T value) => this.LazyInitializeAny(ref value);
 
     public T LazyInitializeAny<T>(ref T value)
     {
@@ -304,7 +304,7 @@ namespace CodeInUnity.Scripts.Managers
 
     public T GetScript<T>(ref T value) where T : MonoBehaviour
     {
-      return LazyInitializeScript<T>(ref value);
+      return this.LazyInitializeScript(ref value);
     }
 
     public T LazyInitializeScript<T>(ref T value) where T : MonoBehaviour
@@ -317,9 +317,14 @@ namespace CodeInUnity.Scripts.Managers
       return value;
     }
 
+    public T LazyInitializeScriptFastUnsafe<T>(ref T value) where T : MonoBehaviour
+    {
+      return value ?? (value = this.GetScript<T>());
+    }
+
     public T LazyInitializeAnyOrScript<T, TScript>(ref T value) where TScript : MonoBehaviour, T
     {
-      LazyInitializeAny(ref value);
+      this.LazyInitializeAny(ref value);
 
       if (value == null)
       {
@@ -331,7 +336,7 @@ namespace CodeInUnity.Scripts.Managers
 
     public void Clear()
     {
-      objects.Clear();
+      this.objects.Clear();
     }
   }
 }

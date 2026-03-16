@@ -155,6 +155,20 @@ namespace System.Linq
       return false;
     }
 
+    public static bool ContainsAnyNA<T>(this List<T> self, T value1, T value2, T value3, T value4)
+    {
+      int count = self.Count;
+      for (int i = 0; i < count; ++i)
+      {
+        if (SafeEquals(self[i], value1) || SafeEquals(self[i], value2) || SafeEquals(self[i], value3) || SafeEquals(self[i], value4))
+        {
+          return true;
+        }
+      }
+
+      return false;
+    }
+
     public static void SortNA<T>(this List<T> items, Func<T, T, int> compare)
     {
       int n = items.Count;

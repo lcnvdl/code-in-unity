@@ -18,5 +18,7 @@ namespace CodeInUnity.Core.Utils
 #else
     public const bool IsDevelopmentBuild = false;
 #endif
+
+    public static bool IsDevelopmentBuildOrUnityEditor => IsDevelopmentBuild || Application.isEditor;
   }
 }
