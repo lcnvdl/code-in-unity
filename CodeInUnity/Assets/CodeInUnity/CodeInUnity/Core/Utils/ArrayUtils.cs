@@ -4,6 +4,24 @@ namespace CodeInUnity.Core.Utils
 {
   public static class ArrayUtils
   {
+    public static T Choose<T>(T a, T b)
+    {
+      return UnityEngine.Random.Range(0, 2) == 0 ? a : b;
+    }
+
+    public static T Choose<T>(T a, T b, T c)
+    {
+      switch (UnityEngine.Random.Range(0, 3))
+      {
+        case 0:
+          return a;
+        case 1:
+          return b;
+        default:
+          return c;
+      }
+    }
+
     public static T Choose<T>(params T[] array)
     {
       switch (array.Length)

@@ -1,28 +1,28 @@
-﻿using System;
+using System;
 using UnityEngine;
 
 namespace CodeInUnity.Scripts.Managers
 {
-  public class SlowUpdateManager : MonoBehaviour
+  public class UnalignedSlowUpdateManager : MonoBehaviour
   {
     private static bool applicationIsQuitting = false;
 
-    private static SlowUpdateManager instance;
+    private static UnalignedSlowUpdateManager instance;
 
-    public static SlowUpdateManager RawInstance => instance;
+    public static UnalignedSlowUpdateManager RawInstance => instance;
 
-    public static SlowUpdateManager Instance
+    public static UnalignedSlowUpdateManager Instance
     {
       get
       {
         if (instance == null && !applicationIsQuitting)
         {
-          instance = FindAnyObjectByType<SlowUpdateManager>();
+          instance = FindAnyObjectByType<UnalignedSlowUpdateManager>();
 
           if (instance == null)
           {
-            var go = new GameObject("SlowUpdateManager");
-            instance = go.AddComponent<SlowUpdateManager>();
+            var go = new GameObject("UnalignedSlowUpdateManager");
+            instance = go.AddComponent<UnalignedSlowUpdateManager>();
           }
         }
 
@@ -36,7 +36,7 @@ namespace CodeInUnity.Scripts.Managers
 
     public event Action slowSecUpdate;
 
-    private float slowQuarterSecUpdateDelay = 0f;
+    private float slowQuarterSecUpdateDelay = 0.33f;
 
     private float slowHalfSecUpdateDelay = 0f;
 

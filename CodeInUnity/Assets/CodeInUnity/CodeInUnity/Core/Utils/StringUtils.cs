@@ -1,9 +1,12 @@
 ﻿using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace CodeInUnity.Core.Utils
 {
   public static class StringUtils
   {
+    private const string ROMAN_PATTERN = @"^M{0,3}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$";
+
     /// <remarks>
     /// Recommended by Unity Team. 
     /// https://docs.unity3d.com/Manual/BestPracticeUnderstandingPerformanceInUnity5.html
@@ -143,6 +146,16 @@ namespace CodeInUnity.Core.Utils
       }
 
       return word.Remove(1).ToUpper() + (tailToLowerCase ? word.Substring(1).ToLower() : word.Substring(1));
+    }
+
+    public static bool IsRomanNumeral(string input)
+    {
+      if (string.IsNullOrWhiteSpace(input))
+      {
+        return false;
+      }
+
+      return Regex.IsMatch(input, ROMAN_PATTERN);
     }
 
     public static bool ContainsAnyLetter(string input)

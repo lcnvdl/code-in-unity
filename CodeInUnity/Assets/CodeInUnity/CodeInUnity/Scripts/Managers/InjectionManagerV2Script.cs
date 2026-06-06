@@ -67,6 +67,13 @@ namespace CodeInUnity.Scripts.Managers
       }
     }
 
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+    private static void ResetForPlayModeWithoutDomainReload()
+    {
+      instance = null;
+      instanceWasCreated = false;
+    }
+
     void OnEnable()
     {
       //var ass = System.Reflection.Assembly.GetExecutingAssembly();
