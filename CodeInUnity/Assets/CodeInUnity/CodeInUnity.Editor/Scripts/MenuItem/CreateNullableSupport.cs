@@ -6,7 +6,7 @@ namespace CodeInUnity.Editor.Scripts
 {
   public static class CreateNullableSupport
   {
-    [MenuItem("Assets/Create/Nullable Support", priority = 100)]
+    [MenuItem("Assets/Create/Nullable Support (csc.rsp)", priority = 100)]
     public static void CreateCscRsp()
     {
       string folderPath = GetSelectedFolderPath();
