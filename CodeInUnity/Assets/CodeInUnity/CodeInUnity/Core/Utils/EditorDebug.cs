@@ -65,5 +65,12 @@ namespace UnityEngine
       Debug.LogException(ex);
 #endif
     }
+
+    public static void LogWith(object message, LogStyle style)
+    {
+#if UNITY_EDITOR
+      Debug.Log(style.Format(message));
+#endif
+    }
   }
 }

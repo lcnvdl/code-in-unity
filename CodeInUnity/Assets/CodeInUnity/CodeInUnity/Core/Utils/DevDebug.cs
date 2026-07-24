@@ -57,5 +57,12 @@ namespace UnityEngine
       }
 #endif
     }
+
+    public static void LogWith(object message, LogStyle style)
+    {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+      Debug.Log(style.Format(message));
+#endif
+    }
   }
 }
