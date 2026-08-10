@@ -16,6 +16,8 @@ namespace CodeInUnity.Core.System
 
     T LazyInitializeAny<T>(ref T value);
 
+    T LazyInitializeAnyFastUnsafe<T>(ref T value);
+
     T LazyInitializeAnyOrScript<T, TScript>(ref T value) where TScript : MonoBehaviour, T;
 
     T GetScript<T>(ref T value) where T : MonoBehaviour;

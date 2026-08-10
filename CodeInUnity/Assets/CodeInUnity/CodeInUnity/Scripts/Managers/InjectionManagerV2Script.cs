@@ -309,6 +309,11 @@ namespace CodeInUnity.Scripts.Managers
       return value;
     }
 
+    public T LazyInitializeAnyFastUnsafe<T>(ref T value)
+    {
+      return value ?? (value = this.GetAny<T>());
+    }
+
     public T GetScript<T>(ref T value) where T : MonoBehaviour
     {
       return this.LazyInitializeScript(ref value);
