@@ -7,5 +7,7 @@ namespace CodeInUnity.Interfaces
     string EntityName { get; }
 
     GameObject GetNewInstance(GameObject prefab);
+
+    GameObject GetNewInstance(GameObject prefab, Vector3 position, Quaternion rotation);
   }
 }

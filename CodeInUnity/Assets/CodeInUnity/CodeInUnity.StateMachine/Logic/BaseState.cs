@@ -1,4 +1,6 @@
 ﻿using System;
+using CodeInUnity.StateMachine.Interfaces;
+using UnityEngine;
 
 namespace CodeInUnity.StateMachine
 {
@@ -7,7 +9,8 @@ namespace CodeInUnity.StateMachine
   {
     public string identifier;
 
-    public StateTransition[] transitions;
+    [SerializeReference]
+    public ITransitionState[] transitions;
 
     protected virtual string Identifier => "Unknown";
 
@@ -24,6 +27,12 @@ namespace CodeInUnity.StateMachine
     public BaseState As(string alias)
     {
       this.identifier = alias;
+      return this;
+    }
+
+    public BaseState SetTransitions(params ITransitionState[] transitions)
+    {
+      this.transitions = transitions;
       return this;
     }
 
@@ -62,17 +71,17 @@ namespace CodeInUnity.StateMachine
           {
             //UnityEngine.Debug.Log($"{this.Identifier}: Transition is empty and task is finished.");
 
-            var newState = manager.StatesRepository?.GetState(this.transitions[i].toState);
+            var newState = manager.StatesRepository?.GetState(this.transitions[i].ToState);
             manager.SwitchState(newState);
           }
-          else if (this.transitions[i].interruptState || this.isTaskFinished)
+          else if (this.transitions[i].InterruptState || this.isTaskFinished)
           {
             //UnityEngine.Debug.Log($"{this.Identifier}: Transition interruptState OR task is finished.");
 
             bool result = this.transitions[i].Test(manager.variables, manager.Triggers);
             if (result)
             {
-              var newState = manager.StatesRepository?.GetState(this.transitions[i].toState);
+              var newState = manager.StatesRepository?.GetState(this.transitions[i].ToState);
               if (newState != null)
               {
                 manager.SwitchState(newState);

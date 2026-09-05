@@ -211,6 +211,36 @@ namespace System.Linq
       return false;
     }
 
+    public static bool ContainsAnyNA<T>(this T[] self, T value, T value2)
+    {
+      int count = self.Length;
+      for (int i = 0; i < count; ++i)
+      {
+        var selfValue = self[i];
+        if (SafeEquals(selfValue, value) || SafeEquals(selfValue, value2))
+        {
+          return true;
+        }
+      }
+
+      return false;
+    }
+
+    public static bool ContainsAnyNA<T>(this T[] self, T value, T value2, T value3)
+    {
+      int count = self.Length;
+      for (int i = 0; i < count; ++i)
+      {
+        var selfValue = self[i];
+        if (SafeEquals(selfValue, value) || SafeEquals(selfValue, value2) || SafeEquals(selfValue, value3))
+        {
+          return true;
+        }
+      }
+
+      return false;
+    }
+
     public static bool ContainsOrdinal(this List<string> self, string value)
     {
       int count = self.Count;

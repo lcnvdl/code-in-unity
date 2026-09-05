@@ -7,7 +7,7 @@ using CodeInUnity.StateMachine.Interfaces;
 namespace CodeInUnity.StateMachine
 {
   [Serializable]
-  public class StateTransition : ITransitionState
+  public class StateStringTransition : ITransitionState
   {
     private static readonly string[] ops = new string[] { "==", "<", ">", "<=", ">=", "!=" };
 
@@ -19,19 +19,23 @@ namespace CodeInUnity.StateMachine
 
     public bool IsEmpty => string.IsNullOrEmpty(this.query);
 
-    public StateTransition()
+    public bool InterruptState => this.interruptState;
+
+    public string ToState => this.toState;
+
+    public StateStringTransition()
     {
       this.interruptState = true;
     }
 
-    public StateTransition(string toState, bool interruptState = true)
+    public StateStringTransition(string toState, bool interruptState = true)
     {
       this.toState = toState;
       this.query = string.Empty;
       this.interruptState = interruptState;
     }
 
-    public StateTransition(string toState, string query, bool interruptState = true)
+    public StateStringTransition(string toState, string query, bool interruptState = true)
     {
       this.toState = toState;
       this.query = query;
