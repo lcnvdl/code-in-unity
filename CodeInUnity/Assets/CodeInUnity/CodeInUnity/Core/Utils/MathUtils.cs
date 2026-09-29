@@ -1,5 +1,4 @@
 using S = System;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 using System;
@@ -25,7 +24,14 @@ namespace CodeInUnity.Core.Utils
         return 0;
       }
 
-      return numbers.Sum() / numbers.Length;
+      float sum = 0f;
+
+      foreach (var value in numbers)
+      {
+        sum += value;
+      }
+
+      return sum / numbers.Length;
     }
 
     public static ulong SumUlong(params ulong[] numbers)

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using CodeInUnity.Scripts.GameObjects;
 using UnityEngine;
 
@@ -10,13 +9,31 @@ namespace CodeInUnity.Extensions
     public static bool HasCustomTag(this Component self, string tag, string value = null)
     {
       var tags = self.GetComponents<CustomTagScript>();
-      return tags.Any(customTag => customTag.tagId.Equals(tag, StringComparison.Ordinal) && (value == null || value.Equals(customTag.additionalValue, StringComparison.Ordinal)));
+
+      foreach (var customTag in tags)
+      {
+        if (customTag.tagId.Equals(tag, StringComparison.Ordinal) && (value == null || value.Equals(customTag.additionalValue, StringComparison.Ordinal)))
+        {
+          return true;
+        }
+      }
+
+      return false;
     }
 
     public static CustomTagScript GetCustomTag(this Component self, string tag, string value = null)
     {
       var tags = self.GetComponents<CustomTagScript>();
-      return tags.FirstOrDefault(customTag => customTag.tagId.Equals(tag, StringComparison.Ordinal) && (value == null || value.Equals(customTag.additionalValue, StringComparison.Ordinal)));
+
+      foreach (var customTag in tags)
+      {
+        if (customTag.tagId.Equals(tag, StringComparison.Ordinal) && (value == null || value.Equals(customTag.additionalValue, StringComparison.Ordinal)))
+        {
+          return customTag;
+        }
+      }
+
+      return null;
     }
 
     public static T LazyGetInstance<T>(this MonoBehaviour self, ref T value, bool lookInChildren = true) where T : Component

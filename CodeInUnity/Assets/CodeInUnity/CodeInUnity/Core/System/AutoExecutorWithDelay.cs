@@ -27,16 +27,17 @@ namespace CodeInUnity.Core.System
 
         public void Update(float dt)
         {
-            var toRemove = this.routines.FindAll(m => m.executions == 0);
-
-            foreach (var routine in toRemove)
+            for (int i = this.routines.Count - 1; i >= 0; i--)
             {
-                this.onFinish.Invoke(routine.name);
-                this.routines.Remove(routine);
-            }
+                var routine = this.routines[i];
 
-            foreach (var routine in routines)
-            {
+                if (routine.executions == 0)
+                {
+                    this.onFinish.Invoke(routine.name);
+                    this.routines.RemoveAt(i);
+                    continue;
+                }
+
                 routine.__timeToExecute -= dt;
 
                 if (routine.__timeToExecute <= 0f)

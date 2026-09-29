@@ -68,6 +68,7 @@ namespace CodeInUnity.Core.Utils
       if (!this.dictionary.TryGetValue(key, out values))
       {
         values = new Dictionary<int, string>();
+        this.dictionary[key] = values;
       }
 
       values[index] = value;
