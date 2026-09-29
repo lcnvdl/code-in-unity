@@ -14,7 +14,6 @@ namespace CodeInUnity.Editor.CustomEditors
 
     private bool wasCancelled = false;
 
-
     void OnEnable()
     {
       this.text = base.serializedObject.FindProperty("text");
